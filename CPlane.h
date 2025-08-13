@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <stdexcept>
 
 class CPlane
 {
@@ -10,7 +11,7 @@ class CPlane
         int seats;
         void validateData() const;
     public:
-        CPlane(int serialNumber, std::string& model, int seats);
+        CPlane(int serialNumber, const std::string& model, int seats);
         CPlane(const CPlane& other);
         ~CPlane();
         int getSerialNumber() const;

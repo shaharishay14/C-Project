@@ -13,7 +13,7 @@ void CPlane::validateData() const
     }
 }
 
-CPlane::CPlane(int serialNumber, std::string model, int seats)
+CPlane::CPlane(int serialNumber, const std::string& model, int seats)
     : serialNumber(serialNumber), model(model), seats(seats)
     {
         validateData();
