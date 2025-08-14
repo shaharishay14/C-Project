@@ -1,57 +1,65 @@
-#include "CAddress.h"
+#include <string>
 
+#include "Address.h"
 
-void CAddress::validateData() const 
+// Validates the address data (city, street, house number)
+void CAddress::ValidateData() const 
 {
     if (city.empty()) {
-        throw std::invalid_argument("City cannot be empty");
+        throw invalid_argument("City cannot be empty");
     }
     if (street.empty()) {
-        throw std::invalid_argument("Street cannot be empty");
+        throw invalid_argument("Street cannot be empty");
     }
     if (houseNumber <= 0) {
-        throw std::invalid_argument("House number must be positive");
+        throw invalid_argument("House number must be positive");
     }
 }
 
-CAddress::CAddress(const std::string& city, const std::string& street, int houseNumber) 
+// Constructor: Initializes the address and validates the data
+CAddress::CAddress(int houseNumber, const string& street, const string& city)
     : city(city), street(street), houseNumber(houseNumber)
 {
-    validateData(); 
+    ValidateData();
 }
 
-CAddress::CAddress(const CAddress& other) 
-    : city(other.city), street(other.street), houseNumber(other.houseNumber){
-    }
+// Default copy constructor
+CAddress::CAddress(const CAddress& other) = default;
 
-CAddress::~CAddress() {
-}
+// Default destructor
+CAddress::~CAddress() = default;
 
-std::string CAddress::getCity() const 
+// Getters
+string CAddress::GetCity() const 
 {
     return city;
 }
 
-std::string CAddress::getStreet() const 
+string CAddress::GetStreet() const
 {
     return street;
 }
 
-int CAddress::getHouseNumber() const
+int CAddress::GetHouseNumber() const
 {
     return houseNumber;
 }
 
-std::string CAddress::print() const
+// Updates the address with new values after validation
+void CAddress::UpdateAddress(const string& newCity, const string& newStreet, int newHouseNumber)
 {
-    return "City: " + city + ", Street: " + street + ", House Number: " + std::to_string(houseNumber);
+    CAddress tmp(newHouseNumber, newStreet, newCity);
+    *this = tmp; 
 }
 
-void CAddress::updateAddress(const std::string& city, const std::string& street, int houseNumber)
+// Prints the address details
+void CAddress::Print() const
 {
-    CAddress temp(city, street, houseNumber);
-    
-    this->city = city;
-    this->street = street;
-    this->houseNumber = houseNumber;
+    cout << "Street: " << street << ", House Number: " << to_string(houseNumber) << ", City: " << city << endl;
+}
+
+// Compares two addresses for equality
+bool CAddress::IsEqual(const CAddress& other) const
+{
+    return city == other.city && street == other.street && houseNumber == other.houseNumber;
 }
