@@ -1,28 +1,47 @@
-#include "CFlightCompany.h"
+#include <stdexcept>
 
-void CFlightCompany::validateData() const
+#include "FlightCompany.h"
+
+// Validates the flight company's data (name)
+void CFlightCompany::ValidateData() const 
 {
-    if (name.empty()) {
-        throw std::invalid_argument("Name cannot be empty");
+    if (name.empty())
+    {
+        throw invalid_argument("Company name cannot be empty");
     }
 }
 
-CFlightCompany::CFlightCompany(const std::string& name)
-    : name(name)
-{}
+// Constructor: Initializes the flight company and validates the name
+CFlightCompany::CFlightCompany(const string& name)
+    : name(name) 
+{
+    ValidateData();
+}
 
-CFlightCompany::CFlightCompany(const CFlightCompany& other)
-    : name(other.name)
-{}
+// Default copy constructor
+CFlightCompany::CFlightCompany(const CFlightCompany& other) = default;
 
-CFlightCompany::~CFlightCompany() {}
+// Default destructor
+CFlightCompany::~CFlightCompany() = default;
 
-std::string CFlightCompany::getName() const
+// Getters
+string CFlightCompany::GetName() const 
 {
     return name;
 }
 
-std::string CFlightCompany::print() const
+// Setters
+void CFlightCompany::SetName(const string& newName) 
 {
-    return "Name: " + name;
+    if (newName.empty())
+    {
+        throw invalid_argument("Company name cannot be empty");
+    }
+    name = newName;
+}
+
+// Print the flight company details
+void CFlightCompany::Print() const 
+{
+    cout << "Flight company: " << name << endl;
 }
