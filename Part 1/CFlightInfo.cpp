@@ -1,7 +1,6 @@
-#include <iostream>
-
 #include "FlightInfo.h"
 
+// Validates the flight data (flight number, destination, duration, and distance)
 void CFlightInfo::ValidateData() const 
 {
     if (flightNumber <= 0) {
@@ -21,22 +20,27 @@ void CFlightInfo::ValidateData() const
     }
 }
 
-CFlightInfo::CFlightInfo( const std::string& destination, int flightNumber, int durationMinutes, int distanceKm)
+// Constructor: Initializes the flight info and validates the data
+CFlightInfo::CFlightInfo( const string& destination, int flightNumber, int durationMinutes, int distanceKm)
     : flightNumber(flightNumber), destination(destination),
     durationMinutes(durationMinutes), distanceKm(distanceKm) 
 {
     ValidateData();
 }
 
+// Default copy constructor
 CFlightInfo::CFlightInfo(const CFlightInfo& other) = default;
+
+// Default destructor
 CFlightInfo::~CFlightInfo() = default;
 
+// Getters
 int CFlightInfo::GetFlightNumber() const
 {
     return flightNumber;
 }
 
-std::string CFlightInfo::GetDestination() const 
+string CFlightInfo::GetDestination() const 
 {
     return destination;
 }
@@ -51,7 +55,8 @@ int CFlightInfo::GetDistanceKm() const
     return distanceKm;
 }
 
-void CFlightInfo::SetDest(const std::string& dest) 
+// Setters
+void CFlightInfo::SetDest(const string& dest) 
 {
     if (dest.empty())
     {
@@ -86,13 +91,15 @@ void CFlightInfo::SetFlightNumber(int newFlightnNumber)
     flightNumber = newFlightnNumber;
 }
 
+// Checks if this flight info is equal to another flight info based on the flight number
 bool CFlightInfo::IsEqual(const CFlightInfo& other) const 
 {
     return flightNumber == other.flightNumber; 
 }
 
+// Prints the flight information to the console
 void CFlightInfo::Print() const 
 {
     std::cout << "Flight info dest: " << destination << " Number: " << std::to_string(flightNumber) <<
-        " minutes: " << std::to_string(durationMinutes) << " KM " << std::to_string(distanceKm) << std::endl;
+        " minutes: " << std::to_string(durationMinutes) << " KM " << std::to_string(distanceKm) << endl;
 }
