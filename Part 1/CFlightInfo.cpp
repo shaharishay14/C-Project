@@ -1,93 +1,105 @@
-#include "CFlightInfo.h"
+#include "FlightInfo.h"
 
-void CFlightInfo::validateData() const
+// Validates the flight data (flight number, destination, duration, and distance)
+void CFlightInfo::ValidateData() const 
 {
-    if (flightNumber < 0) {
-        throw std::invalid_argument("Flight number must be non negative");
+    if (flightNumber <= 0) {
+        throw invalid_argument("Flight number must be positive");
     }
-    if (destination.empty()) {
-        throw std::invalid_argument("Destination cannot be empty");
+    if (destination.empty())
+    {
+        throw invalid_argument("Destination cannot be empty");
     }
-    if (duration < 0){
-        throw std::invalid_argument("Duration must be non negative");
+    if (durationMinutes < 0)
+    {
+        throw invalid_argument("Duration must be non negative");
     }
-    if (distance < 0){
-        throw std::invalid_argument("Distance must be non negative");
+    if (distanceKm < 0)
+    {
+        throw invalid_argument("Distance must be non negative");
     }
 }
 
-CFlightInfo::CFlightInfo(int flightNumber, const std::string& destination, int duration, int distance)
-    : flightNumber(flightNumber), destination(destination), duration(duration), distance(distance)
-    {
-        validateData();
-    }
+// Constructor: Initializes the flight info and validates the data
+CFlightInfo::CFlightInfo( const string& destination, int flightNumber, int durationMinutes, int distanceKm)
+    : flightNumber(flightNumber), destination(destination),
+    durationMinutes(durationMinutes), distanceKm(distanceKm) 
+{
+    ValidateData();
+}
 
-CFlightInfo::CFlightInfo(const CFlightInfo& other)
-    : flightNumber(other.flightNumber), destination(other.destination), duration(other.duration), distance(other.distance)
-    {
+// Default copy constructor
+CFlightInfo::CFlightInfo(const CFlightInfo& other) = default;
 
-    }
+// Default destructor
+CFlightInfo::~CFlightInfo() = default;
 
-CFlightInfo::~CFlightInfo() {}
-
-int CFlightInfo::getFlightNumber() const
+// Getters
+int CFlightInfo::GetFlightNumber() const
 {
     return flightNumber;
 }
 
-std::string CFlightInfo::getDestination() const
+string CFlightInfo::GetDestination() const 
 {
     return destination;
 }
 
-int CFlightInfo::getDuration() const
+int CFlightInfo::GetDurationMinutes() const 
 {
-    return duration;
+    return durationMinutes;
 }
 
-int CFlightInfo::getDistance() const
+int CFlightInfo::GetDistanceKm() const 
 {
-    return distance;
+    return distanceKm;
 }
 
-void CFlightInfo::setFlightNumber(int flightNumber)
+// Setters
+void CFlightInfo::SetDest(const string& dest) 
 {
-    if (flightNumber < 0) {
-        throw std::invalid_argument("Flight number must be non negative");
+    if (dest.empty())
+    {
+        throw invalid_argument("Destination cannot be empty");
     }
-    this->flightNumber = flightNumber;
+    destination = dest;
 }
 
-void CFlightInfo::setDestination(const std::string& destination)
+void CFlightInfo::SetDurationMinutes(int minutes) 
 {
-    if (destination.empty()) {
-        throw std::invalid_argument("Destination cannot be empty");
+    if (minutes < 0)
+    {
+        throw invalid_argument("Duration must be non negative");
     }
-    this->destination = destination;
+    durationMinutes = minutes;
 }
 
-void CFlightInfo::setDuration(int duration)
+void CFlightInfo::SetDistanceKm(int km) 
 {
-    if (duration < 0) {
-        throw std::invalid_argument("Duration must be non negative");
+    if (km < 0)
+    {
+        throw invalid_argument("Distance must be non negative");
     }
-    this->duration = duration;
+    distanceKm = km;
 }
 
-void CFlightInfo::setDistance(int distance)
+void CFlightInfo::SetFlightNumber(int newFlightnNumber)
 {
-    if (distance < 0) {
-        throw std::invalid_argument("Distance must be non negative");
+    if (flightNumber <= 0) {
+        throw invalid_argument("Flight number must be positive");
     }
-    this->distance = distance;
+    flightNumber = newFlightnNumber;
 }
 
-bool CFlightInfo::isEqual(const CFlightInfo& other) const
+// Checks if this flight info is equal to another flight info based on the flight number
+bool CFlightInfo::IsEqual(const CFlightInfo& other) const 
 {
-    return flightNumber == other.flightNumber && destination == other.destination && duration == other.duration && distance == other.distance;
+    return flightNumber == other.flightNumber; 
 }
 
-std::string CFlightInfo::print() const
+// Prints the flight information to the console
+void CFlightInfo::Print() const 
 {
-    return "Flight Number: " + std::to_string(flightNumber) + ", Destination: " + destination + ", Duration: " + std::to_string(duration) + ", Distance: " + std::to_string(distance);
+    cout << "Flight info dest: " << destination << " Number: " << to_string(flightNumber) <<
+        " minutes: " << to_string(durationMinutes) << " KM " << to_string(distanceKm) << endl;
 }
