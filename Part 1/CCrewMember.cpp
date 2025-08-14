@@ -1,71 +1,80 @@
-#include "CCrewMember.h"
+#include "CrewMember.h"
 
-void CCrewMember::validateData() const
-{
-    if (name.empty()) {
-        throw std::invalid_argument("Name cannot be empty");
+// Validates the crew member's data (name and air time)
+void CCrewMember::ValidateData() const {
+    if (name.empty())
+    {
+        throw invalid_argument("Name cannot be empty");
     }
-    if (airTime < 0) {
-        throw std::invalid_argument("Air time must be non negative");
+    if (airTime < 0) 
+    {
+        throw invalid_argument("Air time must be non negative");
     }
-    address.validateData();
 }
 
-CCrewMember::CCrewMember(const std::string& name, int airTime, const CAddress& address)
-    : name(name), airTime(airTime), address(address)
+// Constructor: Initializes the crew member and validates the data
+CCrewMember::CCrewMember(const string& name, const CAddress& address, int airTime)
+    : name(name), address(address), airTime(airTime)
 {
-    validateData();
+    ValidateData();
 }
 
-CCrewMember::CCrewMember(const CCrewMember& other)
-    : name(other.name), airTime(other.airTime), address(other.address)
-{}
+// Default copy constructor
+CCrewMember::CCrewMember(const CCrewMember& other) = default;
 
-CCrewMember::~CCrewMember() {}
+// Default destructor
+CCrewMember::~CCrewMember() = default;
 
-void CCrewMember::updateAirTime(int airTime)
-{
-    if (airTime < 0) {
-        throw std::invalid_argument("Air time must be non negative");
-    }
-    this->airTime += airTime;
+// Getters
+string CCrewMember::GetName() const 
+{ 
+    return name; 
 }
 
-std::string CCrewMember::getName() const
-{
-    return name;
-}
-
-int CCrewMember::getAirTime() const
+int CCrewMember::GetAirTime() const 
 {
     return airTime;
 }
 
-CAddress CCrewMember::getAddress() const
+CAddress CCrewMember::GetAddress() const 
 {
     return address;
 }
 
-void CCrewMember::setName(const std::string& name)
+// Setters
+void CCrewMember::SetName(const string& newName)
 {
-    if (name.empty()) {
-        throw std::invalid_argument("Name cannot be empty");
+    if (newName.empty())
+    {
+        throw invalid_argument("Name cannot be empty");
     }
-    this->name = name;
+    name = newName;
 }
 
-void CCrewMember::setAddress(const CAddress& address)
+void CCrewMember::SetAddress(const CAddress& newAddress)
 {
-    address.validateData();
-    this->address = address;
+    address = newAddress;
 }
 
-bool CCrewMember::isEqual(const CCrewMember& other) const
+// Updates the air time by adding deltaMinutes; returns success status
+bool CCrewMember::UpdateMinutes(int deltaMinutes)
 {
-    return name == other.name && airTime == other.airTime && address.isEqual(other.address);
+    if (deltaMinutes < 0)
+    {
+        return 0;
+    }
+    airTime += deltaMinutes;
+    return 1;
 }
 
-std::string CCrewMember::print() const
+// Compares two crew members for equality based on their names
+bool CCrewMember::IsEqual(const CCrewMember& other) const
 {
-    return "Name: " + name + ", Air Time: " + std::to_string(airTime) + ", Address: " + address.print();
+    return name == other.name;
+}
+
+// Print the crew member's details
+void CCrewMember::Print() const 
+{
+    cout << "Crewmember " << name << " minutes " << to_string(airTime) << endl;
 }
