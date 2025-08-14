@@ -1,7 +1,6 @@
-#include <iostream>
-
 #include "Plane.h"
 
+// Validates the plane's data (serial number, model, and seat count)
 void CPlane::ValidateData() const
 {
     if (serialNumber <= 0) {
@@ -17,21 +16,26 @@ void CPlane::ValidateData() const
     }
 }
 
-CPlane::CPlane(int serialNumber, int seatCount, const std::string& model)
+// Constructor: Initializes the plane and validates the data
+CPlane::CPlane(int serialNumber, int seatCount, const string& model)
     : serialNumber(serialNumber), seatCount(seatCount), model(model)
 {
     ValidateData();
 }
 
+// Default copy constructor 
 CPlane::CPlane(const CPlane& other) = default;
+
+// Default destructor
 CPlane::~CPlane() = default;
 
+// Getters
 int CPlane::GetSerialNumber() const
 {
     return serialNumber;
 }
 
-std::string CPlane::GetModel() const 
+string CPlane::GetModel() const 
 {
     return model;
 }
@@ -41,7 +45,8 @@ int CPlane::GetSeatCount() const
     return seatCount;
 }
 
-void CPlane::SetModel(const std::string& newModel) 
+// Setters
+void CPlane::SetModel(const string& newModel) 
 {
     if (newModel.empty())
     {
@@ -68,12 +73,14 @@ void CPlane::SetFlightNumber(int sn)
 	serialNumber = sn;
 }
 
+// Checks if two planes are equal based on their serial numbers
 bool CPlane::IsEqual(const CPlane& other) const 
 {
     return serialNumber == other.serialNumber; 
 }
 
+// Prints the plane's details
 void CPlane::Print() const {
     std::cout << "Plane " << std::to_string(serialNumber) << " degem: " << model <<
-        " seats: " << std::to_string(seatCount) << std::endl;
+        " seats: " << std::to_string(seatCount) << endl;
 }
