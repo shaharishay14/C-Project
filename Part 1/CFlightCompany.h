@@ -1,17 +1,32 @@
 #pragma once
 
 #include <string>
+#include <iostream>
+using namespace std;
 
-class CFlightCompany
+class CFlightCompany 
 {
-    private:
-        std::string name;
-        void validateData() const;
-    public:
-        CFlightCompany(const std::string& name);
-        CFlightCompany(const CFlightCompany& other);
-        ~CFlightCompany();
-        std::string getName() const;
-        std::string print() const;
+private:
+    string name;
 
-}
+    void ValidateData() const;
+
+public:
+    CFlightCompany() = delete; // Disables the default constructor
+
+    // Constructor: Initializes the flight company with a name
+    CFlightCompany(const string& name);
+
+    // Copy constructor and destructor
+    CFlightCompany(const CFlightCompany& other);
+    ~CFlightCompany();
+
+	// Getters
+    string GetName() const;
+
+	// Setters
+	void SetName(const string& newName);
+
+	// Print the flight company details
+    void Print() const;
+};
