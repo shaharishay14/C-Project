@@ -1,7 +1,8 @@
-#include "CAddress.h"
+#include <iostream>
 
+#include "Address.h"
 
-void CAddress::validateData() const 
+void CAddress::ValidateData() const 
 {
     if (city.empty()) {
         throw std::invalid_argument("City cannot be empty");
@@ -14,44 +15,43 @@ void CAddress::validateData() const
     }
 }
 
-CAddress::CAddress(const std::string& city, const std::string& street, int houseNumber) 
+CAddress::CAddress(int houseNumber, const std::string& street, const std::string& city)
     : city(city), street(street), houseNumber(houseNumber)
 {
-    validateData(); 
+    ValidateData();
 }
 
-CAddress::CAddress(const CAddress& other) 
-    : city(other.city), street(other.street), houseNumber(other.houseNumber){
-    }
+CAddress::CAddress(const CAddress& other) = default;
 
-CAddress::~CAddress() {
-}
+CAddress::~CAddress() = default;
 
-std::string CAddress::getCity() const 
+std::string CAddress::GetCity() const 
 {
     return city;
 }
 
-std::string CAddress::getStreet() const 
+std::string CAddress::GetStreet() const
 {
     return street;
 }
 
-int CAddress::getHouseNumber() const
+int CAddress::GetHouseNumber() const
 {
     return houseNumber;
 }
 
-std::string CAddress::print() const
+void CAddress::UpdateAddress(const std::string& newCity, const std::string& newStreet, int newHouseNumber)
 {
-    return "City: " + city + ", Street: " + street + ", House Number: " + std::to_string(houseNumber);
+    CAddress tmp(newHouseNumber, newStreet, newCity);
+    *this = tmp; 
 }
 
-void CAddress::updateAddress(const std::string& city, const std::string& street, int houseNumber)
+void CAddress::Print() const
 {
-    CAddress temp(city, street, houseNumber);
-    
-    this->city = city;
-    this->street = street;
-    this->houseNumber = houseNumber;
+    std::cout << "Street: " << street << ", House Number: " << std::to_string(houseNumber) << ", City: " << city << std::endl;
+}
+
+bool CAddress::IsEqual(const CAddress& other) const
+{
+    return city == other.city && street == other.street && houseNumber == other.houseNumber;
 }
