@@ -1,36 +1,40 @@
 #pragma once
-#include <string>
-#include <stdexcept>
 
+#include <stdexcept>
+#include <iostream>
+using namespace std;
 
 class CAddress 
 {
 private:
-    std::string city;
-    std::string street;
+    string city; 
+    string street;
     int houseNumber;
 
+    // Validates the address data (city, street, house number)
     void ValidateData() const;
 
 public:
-    CAddress() = delete; 
+    CAddress() = delete; // Disables the default constructor
 
     // Constructor with default city ("Tel Aviv")
-    CAddress(int houseNumber, const std::string& street, const std::string& city = "Tel Aviv");
+    CAddress(int houseNumber, const string& street, const string& city = "Tel Aviv");
 
     // Copy-ctor & Dtor
     CAddress(const CAddress& other);
     ~CAddress();
 
     // Getters
-    std::string GetCity() const;
-    std::string GetStreet() const;
-    int         GetHouseNumber() const;
+    string GetCity() const;
+    string GetStreet() const;
+    int GetHouseNumber() const;
 
-    // Atomic update with validation without duplication – uses a constructor to validate
-    void UpdateAddress(const std::string& newCity, const std::string& newStreet, int newHouseNumber);
+    // Updates the address atomically with validation
+    void UpdateAddress(const string& newCity, const string& newStreet, int newHouseNumber);
 
+	// Prints the address details
     void Print() const;
 
+	// Check if two addresses are equal
     bool IsEqual(const CAddress& other) const;
 };
