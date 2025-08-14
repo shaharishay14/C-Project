@@ -1,8 +1,8 @@
-#include <iostream>
 #include <stdexcept>
 
 #include "FlightCompany.h"
 
+// Validates the flight company's data (name)
 void CFlightCompany::ValidateData() const 
 {
     if (name.empty())
@@ -11,21 +11,27 @@ void CFlightCompany::ValidateData() const
     }
 }
 
-CFlightCompany::CFlightCompany(const std::string& name)
+// Constructor: Initializes the flight company and validates the name
+CFlightCompany::CFlightCompany(const string& name)
     : name(name) 
 {
     ValidateData();
 }
 
+// Default copy constructor
 CFlightCompany::CFlightCompany(const CFlightCompany& other) = default;
+
+// Default destructor
 CFlightCompany::~CFlightCompany() = default;
 
-std::string CFlightCompany::GetName() const 
+// Getters
+string CFlightCompany::GetName() const 
 {
     return name;
 }
 
-void CFlightCompany::SetName(const std::string& newName) 
+// Setters
+void CFlightCompany::SetName(const string& newName) 
 {
     if (newName.empty())
     {
@@ -34,7 +40,8 @@ void CFlightCompany::SetName(const std::string& newName)
     name = newName;
 }
 
+// Print the flight company details
 void CFlightCompany::Print() const 
 {
-    std::cout << "Flight company: " << name << std::endl;
+    std::cout << "Flight company: " << name << endl;
 }
