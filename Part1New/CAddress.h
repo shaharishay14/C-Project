@@ -27,7 +27,7 @@ public:
     // Getters
     const string& GetCity() const;
     const string& GetStreet() const;
-    const int& GetHouseNumber() const;
+    int           GetHouseNumber() const;
 
     // Updates the address atomically with validation
     void UpdateAddress(const string& newCity, const string& newStreet, int newHouseNumber);
