@@ -36,7 +36,7 @@ int CCrewMember::GetAirTime() const
     return airTime;
 }
 
-CAddress CCrewMember::GetAddress() const 
+const CAddress& CCrewMember::GetAddress() const 
 {
     return address;
 }
