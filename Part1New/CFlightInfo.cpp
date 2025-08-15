@@ -1,4 +1,4 @@
-#include "CFlightInfo.h"
+#include "FlightInfo.h"
 
 // Validates the flight data (flight number, destination, duration, and distance)
 void CFlightInfo::ValidateData() const 
@@ -35,22 +35,22 @@ CFlightInfo::CFlightInfo(const CFlightInfo& other) = default;
 CFlightInfo::~CFlightInfo() = default;
 
 // Getters
-const int& CFlightInfo::GetFlightNumber() const
+int CFlightInfo::GetFlightNumber() const
 {
     return flightNumber;
 }
 
-const string& CFlightInfo::GetDestination() const 
+const string& CFlightInfo::GetDestination() const
 {
     return destination;
 }
 
-const int& CFlightInfo::GetDurationMinutes() const 
+int CFlightInfo::GetDurationMinutes() const 
 {
     return durationMinutes;
 }
 
-const int& CFlightInfo::GetDistanceKm() const 
+int CFlightInfo::GetDistanceKm() const 
 {
     return distanceKm;
 }
