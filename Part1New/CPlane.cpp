@@ -1,4 +1,4 @@
-#include "CPlane.h"
+#include "Plane.h"
 
 // Validates the plane's data (serial number, model, and seat count)
 void CPlane::ValidateData() const
@@ -30,17 +30,17 @@ CPlane::CPlane(const CPlane& other) = default;
 CPlane::~CPlane() = default;
 
 // Getters
-const int& CPlane::GetSerialNumber() const
+int CPlane::GetSerialNumber() const
 {
     return serialNumber;
 }
 
-const string& CPlane::GetModel() const 
+const string& CPlane::GetModel() const
 {
     return model;
 }
 
-const int& CPlane::GetSeatCount() const 
+int CPlane::GetSeatCount() const 
 {
     return seatCount;
 }
