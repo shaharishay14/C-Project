@@ -1,6 +1,6 @@
 #include <string>
 
-#include "CAddress.h"
+#include "Address.h"
 
 // Validates the address data (city, street, house number)
 void CAddress::ValidateData() const 
@@ -30,7 +30,7 @@ CAddress::CAddress(const CAddress& other) = default;
 CAddress::~CAddress() = default;
 
 // Getters
-const string& CAddress::GetCity() const 
+const string& CAddress::GetCity() const
 {
     return city;
 }
@@ -40,7 +40,7 @@ const string& CAddress::GetStreet() const
     return street;
 }
 
-const int& CAddress::GetHouseNumber() const
+int CAddress::GetHouseNumber() const
 {
     return houseNumber;
 }
