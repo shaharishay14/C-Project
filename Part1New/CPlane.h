@@ -25,9 +25,9 @@ public:
     ~CPlane();
 
     // Getters
-    const int& GetSerialNumber() const;
+    int           GetSerialNumber() const;
     const string& GetModel() const;
-    const int&    GetSeatCount() const;
+    int           GetSeatCount() const;
 
     // Setters
     void SetModel(const string& newModel);
