@@ -1,4 +1,4 @@
-#include "CCrewMember.h"
+#include "CrewMember.h"
 
 // Validates the crew member's data (name and air time)
 void CCrewMember::ValidateData() const {
@@ -26,17 +26,17 @@ CCrewMember::CCrewMember(const CCrewMember& other) = default;
 CCrewMember::~CCrewMember() = default;
 
 // Getters
-const string& CCrewMember::GetName() const 
+const string& CCrewMember::GetName() const
 { 
     return name; 
 }
 
-const int& CCrewMember::GetAirTime() const 
+int CCrewMember::GetAirTime() const 
 {
     return airTime;
 }
 
-const CAddress& CCrewMember::GetAddress() const 
+CAddress CCrewMember::GetAddress() const 
 {
     return address;
 }
