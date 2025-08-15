@@ -1,6 +1,6 @@
 #include <stdexcept>
 
-#include "CFlightCompany.h"
+#include "FlightCompany.h"
 
 // Validates the flight company's data (name)
 void CFlightCompany::ValidateData() const 
@@ -25,7 +25,7 @@ CFlightCompany::CFlightCompany(const CFlightCompany& other) = default;
 CFlightCompany::~CFlightCompany() = default;
 
 // Getters
-const string& CFlightCompany::GetName() const 
+const string& CFlightCompany::GetName() const
 {
     return name;
 }
