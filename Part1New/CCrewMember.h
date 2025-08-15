@@ -24,9 +24,9 @@ public:
     ~CCrewMember();
 
     // Getters
-    const string&        GetName() const;
-    int                  GetAirTime() const;
-    const CAddress&      GetAddress() const; 
+    const string&   GetName() const;
+    int             GetAirTime() const;
+    const CAddress& GetAddress() const; 
 
     // Set/Update
     void SetName(const string& newName);
