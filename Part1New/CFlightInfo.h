@@ -26,10 +26,10 @@ public:
     ~CFlightInfo();
 
     // Getters
-    const int&    GetFlightNumber() const;
+    int           GetFlightNumber() const;
     const string& GetDestination() const;
-    const int&    GetDurationMinutes() const;
-    const int&    GetDistanceKm() const;
+    int           GetDurationMinutes() const;
+    int           GetDistanceKm() const;
 
 	// Setters
     void SetDest(const string& dest);
