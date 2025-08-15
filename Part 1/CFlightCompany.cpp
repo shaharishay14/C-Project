@@ -1,13 +1,15 @@
 #include "CFlightCompany.h"
 
+using namespace std;
+
 void CFlightCompany::validateData() const
 {
     if (name.empty()) {
-        throw std::invalid_argument("Name cannot be empty");
+        throw invalid_argument("Name cannot be empty");
     }
 }
 
-CFlightCompany::CFlightCompany(const std::string& name)
+CFlightCompany::CFlightCompany(const string& name)
     : name(name)
 {}
 
@@ -17,12 +19,12 @@ CFlightCompany::CFlightCompany(const CFlightCompany& other)
 
 CFlightCompany::~CFlightCompany() {}
 
-std::string CFlightCompany::getName() const
-{
+string CFlightCompany::getName() const
+{   
     return name;
 }
 
-std::string CFlightCompany::print() const
+string CFlightCompany::print() const
 {
     return "Name: " + name;
 }

@@ -2,16 +2,18 @@
 
 #include <string>
 
+using namespace std;
+
 class CFlightCompany
 {
     private:
-        std::string name;
+        string name;
         void validateData() const;
     public:
         CFlightCompany(const std::string& name);
         CFlightCompany(const CFlightCompany& other);
         ~CFlightCompany();
-        std::string getName() const;
-        std::string print() const;
+        string getName() const;
+        string print() const;
 
 }

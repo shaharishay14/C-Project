@@ -1,22 +1,24 @@
 #include "CFlightInfo.h"
 
+using namespace std;
+
 void CFlightInfo::validateData() const
 {
     if (flightNumber < 0) {
-        throw std::invalid_argument("Flight number must be non negative");
+        throw invalid_argument("Flight number must be non negative");
     }
     if (destination.empty()) {
-        throw std::invalid_argument("Destination cannot be empty");
+        throw invalid_argument("Destination cannot be empty");
     }
     if (duration < 0){
-        throw std::invalid_argument("Duration must be non negative");
+        throw invalid_argument("Duration must be non negative");
     }
     if (distance < 0){
-        throw std::invalid_argument("Distance must be non negative");
+        throw invalid_argument("Distance must be non negative");
     }
 }
 
-CFlightInfo::CFlightInfo(int flightNumber, const std::string& destination, int duration, int distance)
+CFlightInfo::CFlightInfo(int flightNumber, const string& destination, int duration, int distance)
     : flightNumber(flightNumber), destination(destination), duration(duration), distance(distance)
     {
         validateData();
@@ -35,7 +37,7 @@ int CFlightInfo::getFlightNumber() const
     return flightNumber;
 }
 
-std::string CFlightInfo::getDestination() const
+string CFlightInfo::getDestination() const
 {
     return destination;
 }
@@ -53,15 +55,15 @@ int CFlightInfo::getDistance() const
 void CFlightInfo::setFlightNumber(int flightNumber)
 {
     if (flightNumber < 0) {
-        throw std::invalid_argument("Flight number must be non negative");
+        throw invalid_argument("Flight number must be non negative");
     }
     this->flightNumber = flightNumber;
 }
 
-void CFlightInfo::setDestination(const std::string& destination)
+void CFlightInfo::setDestination(const string& destination)
 {
     if (destination.empty()) {
-        throw std::invalid_argument("Destination cannot be empty");
+        throw invalid_argument("Destination cannot be empty");
     }
     this->destination = destination;
 }
@@ -69,7 +71,7 @@ void CFlightInfo::setDestination(const std::string& destination)
 void CFlightInfo::setDuration(int duration)
 {
     if (duration < 0) {
-        throw std::invalid_argument("Duration must be non negative");
+        throw invalid_argument("Duration must be non negative");
     }
     this->duration = duration;
 }
@@ -77,7 +79,7 @@ void CFlightInfo::setDuration(int duration)
 void CFlightInfo::setDistance(int distance)
 {
     if (distance < 0) {
-        throw std::invalid_argument("Distance must be non negative");
+        throw invalid_argument("Distance must be non negative");
     }
     this->distance = distance;
 }
@@ -87,7 +89,7 @@ bool CFlightInfo::isEqual(const CFlightInfo& other) const
     return flightNumber == other.flightNumber && destination == other.destination && duration == other.duration && distance == other.distance;
 }
 
-std::string CFlightInfo::print() const
+string CFlightInfo::print() const
 {
-    return "Flight Number: " + std::to_string(flightNumber) + ", Destination: " + destination + ", Duration: " + std::to_string(duration) + ", Distance: " + std::to_string(distance);
+    return "Flight Number: " + to_string(flightNumber) + ", Destination: " + destination + ", Duration: " + to_string(duration) + ", Distance: " + to_string(distance);
 }

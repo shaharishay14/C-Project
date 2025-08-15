@@ -1,19 +1,21 @@
 #include "CPlane.h"
 
+using namespace std;
+
 void CPlane::validateData() const
 {
     if (serialNumber < 0) {
-        throw std::invalid_argument("Serial number must be non negative");
+        throw invalid_argument("Serial number must be non negative");
     }
     if (model.empty()) {
-        throw std::invalid_argument("Model cannot be empty");
+        throw invalid_argument("Model cannot be empty");
     }
     if (seats < 0) {
-        throw std::invalid_argument("Seats must be non negative");
+        throw invalid_argument("Seats must be non negative");
     }
 }
 
-CPlane::CPlane(int serialNumber, const std::string& model, int seats)
+CPlane::CPlane(int serialNumber, const string& model, int seats)
     : serialNumber(serialNumber), model(model), seats(seats)
     {
         validateData();
@@ -32,7 +34,7 @@ int CPlane::getSerialNumber() const
     return serialNumber;
 }
 
-std::string CPlane::getModel() const
+string CPlane::getModel() const
 {
     return model;
 }
@@ -42,9 +44,9 @@ int CPlane::getSeats() const
     return seats;
 }
 
-std::string CPlane::print() const
+string CPlane::print() const
 {
-    return "Serial Number: " + std::to_string(serialNumber) + ", Model: " + model + ", Seats: " + std::to_string(seats);
+    return "Serial Number: " + to_string(serialNumber) + ", Model: " + model + ", Seats: " + to_string(seats);
 }
 
 bool CPlane::isEqual(const CPlane& other) const

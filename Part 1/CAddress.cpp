@@ -1,20 +1,21 @@
 #include "CAddress.h"
 
+using namespace std;
 
 void CAddress::validateData() const 
 {
     if (city.empty()) {
-        throw std::invalid_argument("City cannot be empty");
+        throw invalid_argument("City cannot be empty");
     }
     if (street.empty()) {
-        throw std::invalid_argument("Street cannot be empty");
+        throw invalid_argument("Street cannot be empty");
     }
     if (houseNumber <= 0) {
-        throw std::invalid_argument("House number must be positive");
+        throw invalid_argument("House number must be positive");
     }
 }
 
-CAddress::CAddress(const std::string& city, const std::string& street, int houseNumber) 
+CAddress::CAddress(const string& city, const string& street, int houseNumber) 
     : city(city), street(street), houseNumber(houseNumber)
 {
     validateData(); 
@@ -27,12 +28,12 @@ CAddress::CAddress(const CAddress& other)
 CAddress::~CAddress() {
 }
 
-std::string CAddress::getCity() const 
+string CAddress::getCity() const 
 {
     return city;
 }
 
-std::string CAddress::getStreet() const 
+string CAddress::getStreet() const 
 {
     return street;
 }
@@ -42,12 +43,12 @@ int CAddress::getHouseNumber() const
     return houseNumber;
 }
 
-std::string CAddress::print() const
+string CAddress::print() const
 {
-    return "City: " + city + ", Street: " + street + ", House Number: " + std::to_string(houseNumber);
+    return "City: " + city + ", Street: " + street + ", House Number: " + to_string(houseNumber);
 }
 
-void CAddress::updateAddress(const std::string& city, const std::string& street, int houseNumber)
+void CAddress::updateAddress(const string& city, const string& street, int houseNumber)
 {
     CAddress temp(city, street, houseNumber);
     

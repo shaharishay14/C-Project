@@ -1,0 +1,86 @@
+#include "CPlane.h"
+
+// Validates the plane's data (serial number, model, and seat count)
+void CPlane::ValidateData() const
+{
+    if (serialNumber <= 0) {
+        throw invalid_argument("Serial number must be positive");
+    }
+    if (model.empty())
+    {
+        throw invalid_argument("Model cannot be empty");
+    }
+    if (seatCount < 0)
+    {
+        throw invalid_argument("Seat count must be non negative");
+    }
+}
+
+// Constructor: Initializes the plane and validates the data
+CPlane::CPlane(int serialNumber, int seatCount, const string& model)
+    : serialNumber(serialNumber), seatCount(seatCount), model(model)
+{
+    ValidateData();
+}
+
+// Default copy constructor 
+CPlane::CPlane(const CPlane& other) = default;
+
+// Default destructor
+CPlane::~CPlane() = default;
+
+// Getters
+const int& CPlane::GetSerialNumber() const
+{
+    return serialNumber;
+}
+
+const string& CPlane::GetModel() const 
+{
+    return model;
+}
+
+const int& CPlane::GetSeatCount() const 
+{
+    return seatCount;
+}
+
+// Setters
+void CPlane::SetModel(const string& newModel) 
+{
+    if (newModel.empty())
+    {
+        throw invalid_argument("Model cannot be empty");
+    }
+    model = newModel;
+}
+
+void CPlane::SetSeatCount(int newSeatCount) 
+{
+    if (newSeatCount < 0)
+    {
+        throw invalid_argument("Seat count must be non negative");
+    }
+    seatCount = newSeatCount;
+}
+
+void CPlane::SetFlightNumber(int sn)
+{
+	if (sn <= 0)
+	{
+		throw invalid_argument("Serial number must be positive number");
+	}
+	serialNumber = sn;
+}
+
+// Checks if two planes are equal based on their serial numbers
+bool CPlane::IsEqual(const CPlane& other) const 
+{
+    return serialNumber == other.serialNumber; 
+}
+
+// Prints the plane's details
+void CPlane::Print() const {
+    cout << "Plane " << to_string(serialNumber) << " degem: " << model <<
+        " seats: " << to_string(seatCount) << endl;
+}
