@@ -85,7 +85,7 @@ void CFlightInfo::SetDistanceKm(int km)
 
 void CFlightInfo::SetFlightNumber(int newFlightnNumber)
 {
-    if (flightNumber <= 0) {
+    if (newFlightnNumber <= 0) {
         throw invalid_argument("Flight number must be positive");
     }
     flightNumber = newFlightnNumber;
