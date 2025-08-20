@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdexcept>
+#include <string>
 #include <iostream>
 using namespace std;
 
@@ -9,10 +9,7 @@ class CAddress
 private:
     string city; 
     string street;
-    int houseNumber;
-
-    // Validates the address data (city, street, house number)
-    void ValidateData() const;
+    int    houseNumber;
 
 public:
     CAddress() = delete; // Disables the default constructor
@@ -29,7 +26,7 @@ public:
     const string& GetStreet() const;
     int           GetHouseNumber() const;
 
-    // Updates the address atomically with validation
+    // Updates each field if valid (non-atomic)
     void UpdateAddress(const string& newCity, const string& newStreet, int newHouseNumber);
 
 	// Prints the address details
