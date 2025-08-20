@@ -1,33 +1,27 @@
-#include <string>
-
 #include "Address.h"
 
-// Validates the address data (city, street, house number)
-void CAddress::ValidateData() const 
+// Constructor: Initializes the address
+CAddress::CAddress(int houseNumberPar, const string& streetPar, const string& cityPar)
+    : city("Tel Aviv")   
+    , street("Unknown")  
+    , houseNumber(1)     
 {
-    if (city.empty()) {
-        throw invalid_argument("City cannot be empty");
-    }
-    if (street.empty()) {
-        throw invalid_argument("Street cannot be empty");
-    }
-    if (houseNumber <= 0) {
-        throw invalid_argument("House number must be positive");
-    }
+    // Apply provided values; UpdateAddress ignores any invalid fields
+    UpdateAddress(cityPar, streetPar, houseNumberPar);
+}
+// Copy constructor: Initializes the address from another instance
+CAddress::CAddress(const CAddress& other)
+    : city(other.city)
+    , street(other.street)
+    , houseNumber(other.houseNumber)
+{
 }
 
-// Constructor: Initializes the address and validates the data
-CAddress::CAddress(int houseNumber, const string& street, const string& city)
-    : city(city), street(street), houseNumber(houseNumber)
+// Destructor
+CAddress::~CAddress() 
 {
-    ValidateData();
+    // Nothing to release
 }
-
-// Default copy constructor
-CAddress::CAddress(const CAddress& other) = default;
-
-// Default destructor
-CAddress::~CAddress() = default;
 
 // Getters
 const string& CAddress::GetCity() const
@@ -46,16 +40,27 @@ int CAddress::GetHouseNumber() const
 }
 
 // Updates the address with new values after validation
-void CAddress::UpdateAddress(const string& newCity, const string& newStreet, int newHouseNumber)
+void CAddress::UpdateAddress(const string& city, const string& street, int houseNumber)
 {
-    CAddress tmp(newHouseNumber, newStreet, newCity);
-    *this = tmp; 
+    if (!city.empty())       
+        this->city = city;
+    // else: ignore invalid (leave as-is if empty)
+
+    if (!street.empty())     
+        this->street = street;
+    // else: ignore invalid (leave as-is if empty)
+
+    if (houseNumber > 0)     
+        this->houseNumber = houseNumber;
+    // else: ignore invalid (leave as-is if it is non positive)
 }
 
 // Prints the address details
 void CAddress::Print() const
 {
-    cout << "Street: " << street << ", House Number: " << to_string(houseNumber) << ", City: " << city << endl;
+    cout << "Street: " << street 
+         << ", House Number: " << to_string(houseNumber) 
+         << ", City: " << city << endl;
 }
 
 // Compares two addresses for equality
