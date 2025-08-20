@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <stdexcept>
 #include <iostream>
 using namespace std;
 
@@ -11,8 +10,6 @@ private:
     int    serialNumber;
     string model;
     int    seatCount;
-
-    void ValidateData() const;
 
 public:
     CPlane() = delete; // Disables the default constructor
@@ -32,7 +29,7 @@ public:
     // Setters
     void SetModel(const string& newModel);
     void SetSeatCount(int newSeatCount);
-    void SetFlightNumber(int sn);
+    void SetSerialNumber(int sn);
 
 	// Check if two planes are equal
     bool IsEqual(const CPlane& other) const;
