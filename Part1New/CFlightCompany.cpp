@@ -1,28 +1,23 @@
-#include <stdexcept>
-
 #include "FlightCompany.h"
 
-// Validates the flight company's data (name)
-void CFlightCompany::ValidateData() const 
+// Constructor: Initializes the flight company
+CFlightCompany::CFlightCompany(const string& namePar)
+    : name("Unknown") // safe non-empty default
 {
-    if (name.empty())
-    {
-        throw invalid_argument("Company name cannot be empty");
-    }
+    SetName(namePar);    // ignores invalid (empty)
 }
 
-// Constructor: Initializes the flight company and validates the name
-CFlightCompany::CFlightCompany(const string& name)
-    : name(name) 
+// Copy constructor
+CFlightCompany::CFlightCompany(const CFlightCompany& other)
+    : name(other.name)
 {
-    ValidateData();
 }
 
-// Default copy constructor
-CFlightCompany::CFlightCompany(const CFlightCompany& other) = default;
-
-// Default destructor
-CFlightCompany::~CFlightCompany() = default;
+// Destructor
+CFlightCompany::~CFlightCompany()
+{
+    // Nothing to release
+}
 
 // Getters
 const string& CFlightCompany::GetName() const
@@ -31,13 +26,13 @@ const string& CFlightCompany::GetName() const
 }
 
 // Setters
-void CFlightCompany::SetName(const string& newName) 
+void CFlightCompany::SetName(const string& newName)
 {
-    if (newName.empty())
+    if (!newName.empty())
     {
-        throw invalid_argument("Company name cannot be empty");
+        name = newName;
     }
-    name = newName;
+    // else: ignore invalid (leave as-is if empty)
 }
 
 // Print the flight company details
