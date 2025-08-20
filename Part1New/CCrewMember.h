@@ -1,7 +1,9 @@
 #pragma once
 
 #include <string>
-#include <stdexcept>
+#include <iostream>
+using namespace std;
+
 #include "Address.h"
 
 class CCrewMember 
@@ -10,8 +12,6 @@ private:
     string   name;
     CAddress address;
     int      airTime; 
-
-    void ValidateData() const;
 
 public:
     CCrewMember() = delete; // Disables the default constructor
