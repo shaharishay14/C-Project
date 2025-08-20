@@ -9,8 +9,6 @@ class CFlightCompany
 private:
     string name;
 
-    void ValidateData() const;
-
 public:
     CFlightCompany() = delete; // Disables the default constructor
 

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <stdexcept>
 #include <iostream>
 using namespace std;
 
@@ -12,8 +11,6 @@ private:
     string destination;
     int    durationMinutes;
     int    distanceKm;
-
-    void ValidateData() const;
 
 public:
     CFlightInfo() = delete; // Disables the default constructor

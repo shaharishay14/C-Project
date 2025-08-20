@@ -1,38 +1,32 @@
 #include "FlightInfo.h"
 
-// Validates the flight data (flight number, destination, duration, and distance)
-void CFlightInfo::ValidateData() const 
+// Constructor: Initializes the flight info
+CFlightInfo::CFlightInfo(const string& destinationPar, int flightNumberPar, int durationMinutesPar, int distanceKmPar)
+    : flightNumber(1)        
+    , destination("Unknown")
+    , durationMinutes(0)     
+    , distanceKm(0)         
 {
-    if (flightNumber <= 0) {
-        throw invalid_argument("Flight number must be positive");
-    }
-    if (destination.empty())
-    {
-        throw invalid_argument("Destination cannot be empty");
-    }
-    if (durationMinutes < 0)
-    {
-        throw invalid_argument("Duration must be non negative");
-    }
-    if (distanceKm < 0)
-    {
-        throw invalid_argument("Distance must be non negative");
-    }
+    SetFlightNumber(flightNumberPar);   // ignores invalid
+    SetDest(destinationPar);            // ignores invalid
+    SetDurationMinutes(durationMinutesPar); // ignores invalid
+    SetDistanceKm(distanceKmPar);       // ignores invalid
 }
 
-// Constructor: Initializes the flight info and validates the data
-CFlightInfo::CFlightInfo( const string& destination, int flightNumber, int durationMinutes, int distanceKm)
-    : flightNumber(flightNumber), destination(destination),
-    durationMinutes(durationMinutes), distanceKm(distanceKm) 
+// Copy constructor
+CFlightInfo::CFlightInfo(const CFlightInfo& other)
+    : flightNumber(other.flightNumber)
+    , destination(other.destination)
+    , durationMinutes(other.durationMinutes)
+    , distanceKm(other.distanceKm)
 {
-    ValidateData();
 }
 
-// Default copy constructor
-CFlightInfo::CFlightInfo(const CFlightInfo& other) = default;
-
-// Default destructor
-CFlightInfo::~CFlightInfo() = default;
+// Destructor
+CFlightInfo::~CFlightInfo()
+{
+    // Nothing to release
+}
 
 // Getters
 int CFlightInfo::GetFlightNumber() const
@@ -56,39 +50,32 @@ int CFlightInfo::GetDistanceKm() const
 }
 
 // Setters
-void CFlightInfo::SetDest(const string& dest) 
+void CFlightInfo::SetDest(const string& dest)
 {
-    if (dest.empty())
-    {
-        throw invalid_argument("Destination cannot be empty");
-    }
-    destination = dest;
+    if (!dest.empty())
+        destination = dest;
+    // else: ignore invalid (leave as-is if empty)
 }
 
-void CFlightInfo::SetDurationMinutes(int minutes) 
+void CFlightInfo::SetDurationMinutes(int minutes)
 {
-    if (minutes < 0)
-    {
-        throw invalid_argument("Duration must be non negative");
-    }
-    durationMinutes = minutes;
+    if (minutes >= 0)
+        durationMinutes = minutes;
+    // else: ignore invalid (leave as-is if it is negative)
 }
 
-void CFlightInfo::SetDistanceKm(int km) 
+void CFlightInfo::SetDistanceKm(int km)
 {
-    if (km < 0)
-    {
-        throw invalid_argument("Distance must be non negative");
-    }
-    distanceKm = km;
+    if (km >= 0)
+        distanceKm = km;
+    // else: ignore invalid (leave as-is if it is negative)
 }
 
 void CFlightInfo::SetFlightNumber(int newFlightnNumber)
 {
-    if (newFlightnNumber <= 0) {
-        throw invalid_argument("Flight number must be positive");
-    }
-    flightNumber = newFlightnNumber;
+    if (newFlightnNumber > 0)
+        flightNumber = newFlightnNumber;
+    // else: ignore invalid (leave as-is if it is non positive)
 }
 
 // Checks if this flight info is equal to another flight info based on the flight number
@@ -100,6 +87,8 @@ bool CFlightInfo::IsEqual(const CFlightInfo& other) const
 // Prints the flight information to the console
 void CFlightInfo::Print() const 
 {
-    cout << "Flight info dest: " << destination << " Number: " << to_string(flightNumber) <<
-        " minutes: " << to_string(durationMinutes) << " KM " << to_string(distanceKm) << endl;
+    cout << "Flight info dest: " << destination
+         << " Number: " << flightNumber 
+         << " minutes: " << durationMinutes
+         << " KM " << distanceKm << endl;
 }
