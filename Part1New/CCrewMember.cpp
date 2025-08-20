@@ -1,29 +1,28 @@
 #include "CrewMember.h"
 
-// Validates the crew member's data (name and air time)
-void CCrewMember::ValidateData() const {
-    if (name.empty())
-    {
-        throw invalid_argument("Name cannot be empty");
-    }
-    if (airTime < 0) 
-    {
-        throw invalid_argument("Air time must be non negative");
-    }
-}
-
-// Constructor: Initializes the crew member and validates the data
-CCrewMember::CCrewMember(const string& name, const CAddress& address, int airTime)
-    : name(name), address(address), airTime(airTime)
+// Constructor: Initializes the crew member 
+CCrewMember::CCrewMember(const string& namePar, const CAddress& addressPar, int airTimePar)
+    : name("Unknown")
+    , address(addressPar) // copy validated CAddress value (CAddress enforces its own invariants)
+    , airTime(0)
 {
-    ValidateData();
+    SetName(namePar);            // ignores invalid 
+    UpdateMinutes(airTimePar);   // ignores invalid
 }
 
-// Default copy constructor
-CCrewMember::CCrewMember(const CCrewMember& other) = default;
+// Copy constructor
+CCrewMember::CCrewMember(const CCrewMember& other)
+    : name(other.name)
+    , address(other.address)
+    , airTime(other.airTime)
+{
+}
 
-// Default destructor
-CCrewMember::~CCrewMember() = default;
+// Destructor
+CCrewMember::~CCrewMember()
+{
+    // Nothing to release
+}
 
 // Getters
 const string& CCrewMember::GetName() const
@@ -44,27 +43,22 @@ const CAddress& CCrewMember::GetAddress() const
 // Setters
 void CCrewMember::SetName(const string& newName)
 {
-    if (newName.empty())
-    {
-        throw invalid_argument("Name cannot be empty");
-    }
-    name = newName;
+    if (!newName.empty())
+        name = newName;
+    // else: ignore invalid (leave as-is if empty)
 }
 
 void CCrewMember::SetAddress(const CAddress& newAddress)
 {
-    address = newAddress;
+	address = newAddress; // CAddress itself ensures validity at its construction sites and when changing address
 }
 
-// Updates the air time by adding deltaMinutes; returns success status
 bool CCrewMember::UpdateMinutes(int deltaMinutes)
 {
     if (deltaMinutes < 0)
-    {
-        return 0;
-    }
+        return false;       // ignore invalid (leave as-is if it is negative)
     airTime += deltaMinutes;
-    return 1;
+    return true;
 }
 
 // Compares two crew members for equality based on their names
@@ -76,5 +70,6 @@ bool CCrewMember::IsEqual(const CCrewMember& other) const
 // Print the crew member's details
 void CCrewMember::Print() const 
 {
-    cout << "Crewmember " << name << " minutes " << to_string(airTime) << endl;
+    cout << "Crewmember " << name 
+         << " minutes " << to_string(airTime) << endl;
 }
