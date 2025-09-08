@@ -2,11 +2,31 @@
 
 #include <iostream>
 #include <string>
+
+class CCrewMember;
+class CPlane;
+class CFlight;
+
 using namespace std;
+
+
 
 class CFlightCompany {
     private:
+        static const int MAX_CREWS = 10;
+        static const int MAX_PLANES = 10;
+        static const int MAX_FLIGHTS = 10;
+
         string name;
+        CCrewMember* crews[MAX_CREWS];
+        int crewsCount;
+        CPlane* planes[MAX_PLANES];
+        int planesCount;
+        CFlight* flights[MAX_FLIGHTS];
+        int flightsCount;
+
+        void Clear();
+        void CopyFrom(const CFlightCompany& other);
 
     public:
         CFlightCompany() = delete; // Disables the default constructor
@@ -24,9 +44,6 @@ class CFlightCompany {
         // Setters
         void SetName(const string &newName);
 
-        // Print the flight company details - Replaced with << operator
-        // void Print() const;
-
         // Assignment operator
         void operator=(const CFlightCompany &other);
 
@@ -36,4 +53,25 @@ class CFlightCompany {
         // Stream operators
         friend ostream &operator<<(ostream &os, const CFlightCompany &flightCompany);
         // friend istream &operator>>(istream &is, CFlightCompany &flightCompany);
+
+        // Add crew member
+        bool AddCrewMember(const CCrewMember &crewMember);
+        
+        // Add plane
+        bool AddPlane(const CPlane &plane);
+
+        // Add flight
+        bool AddFlight(const CFlight &flight);
+
+        // Add crew member to flight
+        bool AddCrewToFlight(const int flightNumber, const int id);
+
+        // Get crew member by index
+        CCrewMember* GetCrewMember(const int id);
+
+        // Get flight by index
+        CFlight* GetFlight(const int flightNumber);
+
+        // Get plane by index
+        CPlane* GetPlane(const int index); 
 };

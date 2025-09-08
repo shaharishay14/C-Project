@@ -23,7 +23,7 @@ class CFlightInfo {
         ~CFlightInfo();
 
         // Getters
-        int GetFlightNumber() const;
+        int GetFNum() const;
         const string &GetDestination() const;
         int GetDurationMinutes() const;
         int GetDistanceKm() const;

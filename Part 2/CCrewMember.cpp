@@ -1,8 +1,8 @@
 #include "CCrewMember.h"
 
-int CCrewMember::nextId = 1000;
+int CCrewMember::nextId = CCrewMember::START_ID;
 
-// Constructor: Initializes the crew member 
+// Constructor: Initializes the crew member  with name and address and air time
 CCrewMember::CCrewMember(const string& namePar, const CAddress& addressPar, int airTimePar)
     : name("Unknown")
     , address(addressPar) // copy validated CAddress value (CAddress enforces its own invariants)
@@ -10,9 +10,19 @@ CCrewMember::CCrewMember(const string& namePar, const CAddress& addressPar, int 
     , id(nextId++)
 {
     SetName(namePar);            // ignores invalid 
-    UpdateMinutes(airTimePar);   // ignores invalid
+    operator+=(airTimePar);   // ignores invalid
 }
 
+// Constructor: Initializes the crew member with name and optional air time
+CCrewMember::CCrewMember(const string& namePar, int airTimePar)
+    : name("Unknown")
+    , address(CAddress(1, "Unknown"))
+    , airTime(0)
+    , id(nextId++)
+{
+    SetName(namePar);            // ignores invalid 
+    operator+=(airTimePar);   // ignores invalid
+}
 // Copy constructor
 CCrewMember::CCrewMember(const CCrewMember& other)
     : name(other.name)
@@ -62,23 +72,11 @@ void CCrewMember::SetAddress(const CAddress& newAddress)
 	address = newAddress; // CAddress itself ensures validity at its construction sites and when changing address
 }
 
-bool CCrewMember::UpdateMinutes(int deltaMinutes)
-{
-    if (deltaMinutes < 0)
-        return false;       // ignore invalid (leave as-is if it is negative)
-    airTime += deltaMinutes;
-    return true;
+//Compares two crew members for equality based on their ids
+bool CCrewMember::IsEqual(const CCrewMember &other) const {
+  return id == other.id;
 }
 
-// Compares two crew members for equality based on their names
-// bool CCrewMember::IsEqual(const CCrewMember &other) const {
-//   return name == other.name;
-// }
-
-// Print the crew member's details
-// void CCrewMember::Print() const {
-//   cout << "Crewmember " << name << " minutes " << to_string(airTime) << endl;
-// }
 
 // Assignment operator
 void CCrewMember::operator=(const CCrewMember &other) {
@@ -90,6 +88,13 @@ void CCrewMember::operator=(const CCrewMember &other) {
     }
 }
 
+bool CCrewMember::operator+=(int deltaMinutes) {
+    if (deltaMinutes < 0)
+        return false;
+    airTime += deltaMinutes;
+    return true;
+}
+
 // Equality operator
 bool CCrewMember::operator==(const CCrewMember &other) const {
     return name == other.name;
@@ -97,7 +102,6 @@ bool CCrewMember::operator==(const CCrewMember &other) const {
 
 // Stream operators
 ostream &operator<<(ostream &os, const CCrewMember &crewMember) {
-    os << crewMember.GetName() << " " << crewMember.GetAddress() << " "
-       << to_string(crewMember.GetAirTime()) << " " << to_string(crewMember.GetId());
+    os << "Crewmember: " <<crewMember.GetName() << " Minutes: " << to_string(crewMember.GetAirTime()) << endl;
     return os;
 }

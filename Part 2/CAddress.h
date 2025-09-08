@@ -17,6 +17,10 @@ class CAddress {
         CAddress(int houseNumber, const string &street,
                 const string &city = "Tel Aviv");
 
+        // Convenience constructor to handle C-string/null inputs (used by main)
+        CAddress(int houseNumber, const char *street,
+                const char *city = "Tel Aviv");
+
         // Copy-ctor & Dtor
         CAddress(const CAddress &other);
         ~CAddress();

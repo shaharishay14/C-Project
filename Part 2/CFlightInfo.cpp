@@ -29,7 +29,7 @@ CFlightInfo::~CFlightInfo()
 }
 
 // Getters
-int CFlightInfo::GetFlightNumber() const
+int CFlightInfo::GetFNum() const
 {
     return flightNumber;
 }
@@ -78,20 +78,6 @@ void CFlightInfo::SetFlightNumber(int newFlightnNumber)
     // else: ignore invalid (leave as-is if it is non positive)
 }
 
-// Checks if this flight info is equal to another flight info based on the
-// flight number
-// bool CFlightInfo::IsEqual(const CFlightInfo &other) const {
-//   return flightNumber == other.flightNumber;
-// }
-
-// Prints the flight information to the console
-// void CFlightInfo::Print() const {
-//   cout << "Flight info dest: " << destination
-//        << " Number: " << to_string(flightNumber)
-//        << " minutes: " << to_string(durationMinutes) << " KM "
-//        << to_string(distanceKm) << endl;
-// }
-
 // Assignment operator
 void CFlightInfo::operator=(const CFlightInfo &other) {
     if (this != &other) {
@@ -114,10 +100,10 @@ bool CFlightInfo::operator!=(const CFlightInfo &other) const {
 
 // Stream operators
 ostream &operator<<(ostream &os, const CFlightInfo &flightInfo) {
-    cout << flightInfo.GetDestination() << " "
-         << to_string(flightInfo.GetFlightNumber()) << " "
+    os <<"Flight info dest: " <<flightInfo.GetDestination() << " Number"
+         << to_string(flightInfo.GetFNum()) << " Minutes"
          << to_string(flightInfo.GetDurationMinutes()) << " "
-         << to_string(flightInfo.GetDistanceKm());
+         << to_string(flightInfo.GetDistanceKm()) << " KM" << endl;
     return os;
 }
 

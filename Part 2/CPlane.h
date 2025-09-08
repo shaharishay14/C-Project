@@ -50,4 +50,7 @@ class CPlane {
 
         // Increment operator - Prefix increment
         const CPlane &operator++();
+
+        // Increment operator - Postfix increment
+        const CPlane operator++(int);
 };

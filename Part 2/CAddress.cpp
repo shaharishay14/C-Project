@@ -11,6 +11,18 @@ CAddress::CAddress(int houseNumberPar, const string& streetPar, const string& ci
     // Apply provided values; UpdateAddress ignores any invalid fields
     UpdateAddress(cityPar, streetPar, houseNumberPar);
 }
+
+// Convenience constructor to handle C-string/null inputs
+CAddress::CAddress(int houseNumberPar, const char* streetPar, const char* cityPar)
+    : city("Tel Aviv")
+    , street("Unknown")
+    , houseNumber(1)
+{
+    const string safeStreet = (streetPar ? string(streetPar) : string());
+    const string safeCity = (cityPar ? string(cityPar) : string());
+    UpdateAddress(safeCity, safeStreet, houseNumberPar);
+}
+
 // Copy constructor: Initializes the address from another instance
 CAddress::CAddress(const CAddress& other)
     : city(other.city)
@@ -59,22 +71,9 @@ void CAddress::UpdateAddress(const string& city, const string& street, int house
 
 
 string CAddress::GetCurrentAddress() const {
-    string s = street + " " + to_string(houseNumber) + " " + city;
+    string s = this->street + " " + to_string(this->houseNumber) + " " + this->city;
     return s;
 }
-
-// Prints the address details
-// void CAddress::Print() const {
-//   cout << "Street: " << street << ", House Number: " <<
-//   to_string(houseNumber)
-//        << ", City: " << city << endl;
-// }
-
-// // Compares two addresses for equality
-// bool CAddress::IsEqual(const CAddress &other) const {
-//   return city == other.city && street == other.street &&
-//          houseNumber == other.houseNumber;
-// }
 
 // Assignment operator
 void CAddress::operator=(const CAddress &other) {
@@ -97,22 +96,14 @@ bool CAddress::operator!=(const CAddress &other) const {
 }
 
 // Stream operators
-ostream &operator>>(ostream &os, const CAddress &address) {
-    cout << address.GetCity() << " " << address.GetStreet() << " "
-        << address.GetHouseNumber();
+ostream &operator<<(ostream &os, const CAddress &address) {
+    os << address.GetStreet() << " " << address.GetHouseNumber() << " "
+        << address.GetCity();
     return os;
 }
 
 istream &operator>>(istream &is, CAddress &address) {
-    string city, street;
-    int houseNumber;
-    cout << "Enter city: ";
-    cin >> city;
-    cout << "Enter street: ";
-    cin >> street;
-    cout << "Enter house number: ";
-    cin >> houseNumber;
-    // Use the constructor to validate the data
-    address = CAddress(houseNumber, street, city);
+    cout << "Please enter house number, street name and city name:" << endl;
+    is >> address.houseNumber >> address.street >> address.city;
     return is;
 }
