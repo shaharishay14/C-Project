@@ -7,51 +7,51 @@
 
 
 class CCrewMember {
-    private:
+private:
     static int nextId;
     string name;
     CAddress address;
     int airTime;
     int id;
-    
-    public:
-    
-        static const int START_ID = 1000 ; // starts at 1000
 
-        CCrewMember() = delete; // Disables the default constructor
+public:
 
-        // Constructor: Initializes the crew member with name, address and optional default air time (0)
-        CCrewMember(const string &name, const CAddress &address, int airTime = 0);
+    static const int START_ID = 1000; // starts at 1000
 
-        // Constructor: Initializes the crew member with name and optional air time
-        CCrewMember(const string &name, int airTime = 0);
+    CCrewMember() = delete; // Disables the default constructor
 
-        // Copy-ctor & Dtor
-        CCrewMember(const CCrewMember &other);
-        ~CCrewMember();
+    // Constructor: Initializes the crew member with name, address and optional default air time (0)
+    CCrewMember(const string& name, const CAddress& address, int airTime = 0);
 
-        // Getters
-        const string &GetName() const;
-        int GetAirTime() const;
-        const CAddress &GetAddress() const;
-        int GetId() const;
+    // Constructor: Initializes the crew member with name and optional air time
+    CCrewMember(const string& name, int airTime = 0);
 
-        // Setters/Updates
-        void SetName(const string &newName);
-        void SetAddress(const CAddress &newAddress);
+    // Copy-ctor & Dtor
+    CCrewMember(const CCrewMember& other);
+    ~CCrewMember();
 
-        // Check if two crew members are equal by id
-        bool IsEqual(const CCrewMember &other) const;
+    // Getters
+    const string& GetName() const;
+    int GetAirTime() const;
+    const CAddress& GetAddress() const;
+    int GetId() const;
 
-        // Assignment operator
-        void operator=(const CCrewMember &other);
+    // Setters/Updates
+    void SetName(const string& newName);
+    void SetAddress(const CAddress& newAddress);
 
-        // Addition operator
-        bool operator+=(int deltaMinutes);
+    // Check if two crew members are equal by id
+    bool IsEqual(const CCrewMember& other) const;
 
-        // Equality operator
-        bool operator==(const CCrewMember &other) const;
+    // Assignment operator
+    void operator=(const CCrewMember& other);
 
-        // Stream operators
-        friend ostream &operator<<(ostream &os, const CCrewMember &crewMember);
+    // Addition operator
+    bool operator+=(int deltaMinutes);
+
+    // Equality operator
+    bool operator==(const CCrewMember& other) const;
+
+    // Stream operators
+    friend ostream& operator<<(ostream& os, const CCrewMember& crewMember);
 };

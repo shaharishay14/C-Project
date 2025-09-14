@@ -5,52 +5,45 @@
 using namespace std;
 
 class CPlane {
-    private:
-        static int nextSerialNumber; // Auto-incrementing serial counter
-        int serialNumber;
-        string model;
-        int seatCount;
+private:
+    static int nextSerialNumber; // Auto-incrementing serial counter
+    int serialNumber;
+    string model;
+    int seatCount;
+    static const int START_SERIAL = 100;
 
-    public:
-        CPlane() = delete; // Disables the default constructor
+public:
+    CPlane() = delete; // Disables the default constructor
 
-        // Constructor: Initializes the plane with seat count and model
-        // Serial number is automatically assigned
-        CPlane(int seatCount, const string &model);
+    // Constructor: Initializes the plane with seat count and model
+    // Serial number is automatically assigned
+    CPlane(int seatCount, const string& model);
 
-        // Copy constructor and destructor
-        CPlane(const CPlane &other);
-        ~CPlane();
+    // Copy constructor and destructor
+    CPlane(const CPlane& other);
+    ~CPlane();
 
-        // Getters
-        int GetSerialNumber() const;
-        const string &GetModel() const;
-        int GetSeatCount() const;
+    // Getters
+    int GetSerialNumber() const;
+    const string& GetModel() const;
+    int GetSeatCount() const;
 
-        // Setters
-        void SetModel(const string &newModel);
-        void SetSeatCount(int newSeatCount);
-        // void SetFlightNumber(int sn); // Removed setter for serial number
+    // Setters
+    void SetModel(const string& newModel);
+    void SetSeatCount(int newSeatCount);
 
-        // Check if two planes are equal - Replaced with == operator
-        // bool IsEqual(const CPlane &other) const;
+    // Assignment operator
+    void operator=(const CPlane& other);
 
-        // Print plane information - Replaced with << operator
-        // void Print() const;
+    // Equality operator
+    bool operator==(const CPlane& other) const;
 
-        // Assignment operator
-        void operator=(const CPlane &other);
+    // Stream operators
+    friend ostream& operator<<(ostream& os, const CPlane& plane);
 
-        // Equality operator
-        bool operator==(const CPlane &other) const;
+    // Increment operator - Prefix increment
+    const CPlane& operator++();
 
-        // Stream operators
-        friend ostream &operator<<(ostream &os, const CPlane &plane);
-        // friend istream &operator>>(istream &is, CPlane &plane);
-
-        // Increment operator - Prefix increment
-        const CPlane &operator++();
-
-        // Increment operator - Postfix increment
-        const CPlane operator++(int);
+    // Increment operator - Postfix increment
+    const CPlane operator++(int);
 };

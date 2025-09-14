@@ -12,66 +12,68 @@ using namespace std;
 
 
 class CFlightCompany {
-    private:
-        static const int MAX_CREWS = 10;
-        static const int MAX_PLANES = 10;
-        static const int MAX_FLIGHTS = 10;
+private:
+    static const int MAX_CREWS = 10;
+    static const int MAX_PLANES = 10;
+    static const int MAX_FLIGHTS = 10;
 
-        string name;
-        CCrewMember* crews[MAX_CREWS];
-        int crewsCount;
-        CPlane* planes[MAX_PLANES];
-        int planesCount;
-        CFlight* flights[MAX_FLIGHTS];
-        int flightsCount;
+    string name;
+    CCrewMember* crews[MAX_CREWS];
+    int crewsCount;
+    CPlane* planes[MAX_PLANES];
+    int planesCount;
+    CFlight* flights[MAX_FLIGHTS];
+    int flightsCount;
 
-        void Clear();
-        void CopyFrom(const CFlightCompany& other);
+    void Clear();
+    void CopyFrom(const CFlightCompany& other);
 
-    public:
-        CFlightCompany() = delete; // Disables the default constructor
+public:
+    CFlightCompany() = delete; // Disables the default constructor
 
-        // Constructor: Initializes the flight company with a name
-        CFlightCompany(const string &name);
+    // Constructor: Initializes the flight company with a name
+    CFlightCompany(const string& name);
 
-        // Copy constructor and destructor
-        CFlightCompany(const CFlightCompany &other);
-        ~CFlightCompany();
+    // Copy constructor and destructor
+    CFlightCompany(const CFlightCompany& other);
+    ~CFlightCompany();
 
-        // Getters
-        const string &GetName() const;
+    // Getters
+    const string& GetName() const;
 
-        // Setters
-        void SetName(const string &newName);
+    // Setters
+    void SetName(const string& newName);
 
-        // Assignment operator
-        void operator=(const CFlightCompany &other);
+    // Print the flight company details
+    void Print(ostream &os) const;
 
-        // Equality operator
-        bool operator==(const CFlightCompany &other) const;
+    // Assignment operator
+    void operator=(const CFlightCompany& other);
 
-        // Stream operators
-        friend ostream &operator<<(ostream &os, const CFlightCompany &flightCompany);
-        // friend istream &operator>>(istream &is, CFlightCompany &flightCompany);
+    // Equality operator
+    bool operator==(const CFlightCompany& other) const;
 
-        // Add crew member
-        bool AddCrewMember(const CCrewMember &crewMember);
-        
-        // Add plane
-        bool AddPlane(const CPlane &plane);
+    // Stream operators
+    friend ostream& operator<<(ostream& os, const CFlightCompany& flightCompany);
+ 
+    // Add crew member
+    bool AddCrewMember(const CCrewMember& crewMember);
 
-        // Add flight
-        bool AddFlight(const CFlight &flight);
+    // Add plane
+    bool AddPlane(const CPlane& plane);
 
-        // Add crew member to flight
-        bool AddCrewToFlight(const int flightNumber, const int id);
+    // Add flight
+    bool AddFlight(const CFlight& flight);
 
-        // Get crew member by index
-        CCrewMember* GetCrewMember(const int id);
+    // Add crew member to flight
+    bool AddCrewToFlight(const int flightNumber, const int id);
 
-        // Get flight by index
-        CFlight* GetFlight(const int flightNumber);
+    // Get crew member by index
+    CCrewMember* GetCrewMember(const int id) const;
 
-        // Get plane by index
-        CPlane* GetPlane(const int index); 
+    // Get flight by index
+    CFlight* GetFlight(const int flightNumber) const;
+
+    // Get plane by index
+    CPlane* GetPlane(const int index) const;
 };

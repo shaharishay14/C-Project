@@ -79,7 +79,7 @@ void CFlightInfo::SetFlightNumber(int newFlightnNumber)
 }
 
 // Assignment operator
-void CFlightInfo::operator=(const CFlightInfo &other) {
+void CFlightInfo::operator=(const CFlightInfo& other) {
     if (this != &other) {
         flightNumber = other.flightNumber;
         destination = other.destination;
@@ -89,21 +89,21 @@ void CFlightInfo::operator=(const CFlightInfo &other) {
 }
 
 // Equality operator
-bool CFlightInfo::operator==(const CFlightInfo &other) const {
+bool CFlightInfo::operator==(const CFlightInfo& other) const {
     return flightNumber == other.flightNumber;
 }
 
 // Inequality operator
-bool CFlightInfo::operator!=(const CFlightInfo &other) const {
+bool CFlightInfo::operator!=(const CFlightInfo& other) const {
     return !(*this == other);
 }
 
 // Stream operators
-ostream &operator<<(ostream &os, const CFlightInfo &flightInfo) {
-    os <<"Flight info dest: " <<flightInfo.GetDestination() << " Number"
-         << to_string(flightInfo.GetFNum()) << " Minutes"
-         << to_string(flightInfo.GetDurationMinutes()) << " "
-         << to_string(flightInfo.GetDistanceKm()) << " KM" << endl;
+ostream& operator<<(ostream& os, const CFlightInfo& flightInfo) {
+    os << "Flight info dest: " << flightInfo.GetDestination() << " Number"
+        << to_string(flightInfo.GetFNum()) << " Minutes"
+        << to_string(flightInfo.GetDurationMinutes()) << " "
+        << to_string(flightInfo.GetDistanceKm()) << " KM" << endl;
     return os;
 }
 

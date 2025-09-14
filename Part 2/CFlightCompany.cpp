@@ -14,8 +14,8 @@ void CFlightCompany::Clear() {
 }
 
 void CFlightCompany::CopyFrom(const CFlightCompany& other) {
-    for (int i = 0; i < MAX_CREWS;   ++i) crews[i]   = nullptr;
-    for (int i = 0; i < MAX_PLANES;  ++i) planes[i]  = nullptr;
+    for (int i = 0; i < MAX_CREWS; ++i) crews[i] = nullptr;
+    for (int i = 0; i < MAX_PLANES; ++i) planes[i] = nullptr;
     for (int i = 0; i < MAX_FLIGHTS; ++i) flights[i] = nullptr;
 
     name = other.name;
@@ -41,13 +41,13 @@ CFlightCompany::CFlightCompany(const string& namePar)
     , flightsCount(0)
 {
     SetName(namePar);    // ignores invalid (empty)
-    for(int i = 0; i < MAX_CREWS; i++) {
+    for (int i = 0; i < MAX_CREWS; i++) {
         crews[i] = nullptr;
     }
-    for(int i = 0; i < MAX_PLANES; i++) {
+    for (int i = 0; i < MAX_PLANES; i++) {
         planes[i] = nullptr;
     }
-    for(int i = 0; i < MAX_FLIGHTS; i++) {
+    for (int i = 0; i < MAX_FLIGHTS; i++) {
         flights[i] = nullptr;
     }
 }
@@ -81,58 +81,63 @@ void CFlightCompany::SetName(const string& newName)
     // else: ignore invalid (leave as-is if empty)
 }
 
+// Print the flight company details
+void CFlightCompany::Print(ostream &os) const
+{
+    os << "Flight company: " << name << endl;
+
+    os << "There are " << crewsCount << " Crew members" << endl;
+    for (int i = 0; i < crewsCount; ++i) {
+        if (crews[i]) os << *crews[i] << endl;
+    }
+
+    os << "There are " << planesCount << " Planes" << endl;
+    for (int i = 0; i < planesCount; ++i) {
+        if (planes[i]) os << *planes[i]; 
+    }
+
+    os << "There are " << flightsCount << " Flights" << endl;
+    for (int i = 0; i < flightsCount; ++i) {
+        if (flights[i]) os << *flights[i] << endl;
+    }
+}
+
 // Assignment operator
-void CFlightCompany::operator=(const CFlightCompany &other) {
-  if (this == &other) return;
-  Clear();
-  CopyFrom(other);
+void CFlightCompany::operator=(const CFlightCompany& other) {
+    if (this == &other) return;
+    Clear();
+    CopyFrom(other);
 }
 
 // Equality operator
-bool CFlightCompany::operator==(const CFlightCompany &other) const {
-  return name == other.name;
+bool CFlightCompany::operator==(const CFlightCompany& other) const {
+    return name == other.name;
 }
 
 // Stream operators
-ostream &operator<<(ostream &os, const CFlightCompany &fc) {
-    os << "Flight Company: " << fc.GetName() << endl;
-
-    os << "There are " << fc.crewsCount << " Crew members" << endl;
-    for (int i = 0; i < fc.crewsCount; ++i) {
-        if (fc.crews[i]) os << *fc.crews[i] << endl;
-    }
-
-    os << "There are " << fc.planesCount << " Planes" << endl;
-    for (int i = 0; i < fc.planesCount; ++i) {
-        if (fc.planes[i]) os << *fc.planes[i]; // CPlane << already ends with endl
-    }
-
-    os << "There are " << fc.flightsCount << " Flights" << endl;
-    for (int i = 0; i < fc.flightsCount; ++i) {
-        if (fc.flights[i]) os << *fc.flights[i] << endl;
-    }
-
+ostream& operator<<(ostream& os, const CFlightCompany& fc) {
+    fc.Print(os);
     return os;
 }
 
-bool CFlightCompany::AddCrewMember(const CCrewMember &crewMember) {
-    if(crewsCount >= MAX_CREWS) return false;
-    if(GetCrewMember(crewMember.GetId()) != nullptr) return false;
+bool CFlightCompany::AddCrewMember(const CCrewMember& crewMember) {
+    if (crewsCount >= MAX_CREWS) return false;
+    if (GetCrewMember(crewMember.GetId()) != nullptr) return false;
     crews[crewsCount++] = new CCrewMember(crewMember);
     return true;
 }
 
-CCrewMember* CFlightCompany::GetCrewMember(const int id) {
-    for(int i = 0; i < crewsCount; i++) {
-        if(crews[i] && crews[i]->GetId() == id) return crews[i];
+CCrewMember* CFlightCompany::GetCrewMember(const int id) const {
+    for (int i = 0; i < crewsCount; i++) {
+        if (crews[i] && crews[i]->GetId() == id) return crews[i];
     }
     return nullptr;
 }
 
 
-CFlight* CFlightCompany::GetFlight(const int flightNumber) {
-    for(int i = 0; i < flightsCount; i++) {
-        if(flights[i] && flights[i]->GetFlightInfo().GetFNum() == flightNumber) return flights[i];
+CFlight* CFlightCompany::GetFlight(const int flightNumber) const {
+    for (int i = 0; i < flightsCount; i++) {
+        if (flights[i] && flights[i]->GetFlightInfo().GetFNum() == flightNumber) return flights[i];
     }
     return nullptr;
 }
@@ -140,36 +145,36 @@ CFlight* CFlightCompany::GetFlight(const int flightNumber) {
 bool CFlightCompany::AddCrewToFlight(const int flightNumber, const int id)
 {
     CFlight* flight = GetFlight(flightNumber);
-    if(flight == nullptr) return false;
+    if (flight == nullptr) return false;
     CCrewMember* crewMember = GetCrewMember(id);
-    if(crewMember == nullptr) return false;
+    if (crewMember == nullptr) return false;
 
     int before = flight->GetCrewCount();
     *flight + *crewMember;
     return before < flight->GetCrewCount();
 }
 
-CPlane* CFlightCompany::GetPlane(const int index) {
-    if(index < 0 || index >= MAX_PLANES) return nullptr;
-    if(planes[index] == nullptr) return nullptr;
+CPlane* CFlightCompany::GetPlane(const int index) const {
+    if (index < 0 || index >= MAX_PLANES) return nullptr;
+    if (planes[index] == nullptr) return nullptr;
     return planes[index];
 }
 
-bool CFlightCompany::AddPlane(const CPlane &plane) {
-    if(planesCount >= MAX_PLANES) return false;
+bool CFlightCompany::AddPlane(const CPlane& plane) {
+    if (planesCount >= MAX_PLANES) return false;
     CPlane* newPlane = new CPlane(plane);
-    if(newPlane) {
+    if (newPlane) {
         planes[planesCount++] = newPlane;
     }
     return true;
 }
 
-bool CFlightCompany::AddFlight(const CFlight &flight) {
-    if(flightsCount >= MAX_FLIGHTS) return false; 
+bool CFlightCompany::AddFlight(const CFlight& flight) {
+    if (flightsCount >= MAX_FLIGHTS) return false;
     CFlight* newFlight = GetFlight(flight.GetFlightInfo().GetFNum());
-    if(newFlight == nullptr) {
+    if (newFlight == nullptr) {
         newFlight = new CFlight(flight);
-        if(newFlight) {
+        if (newFlight) {
             flights[flightsCount++] = newFlight;
         }
         return true;

@@ -2,17 +2,17 @@
 #include "CCrewMember.h"
 
 // Helper: find crew index; returns -1 if not found
-int CFlight::FindCrewIndex(const CCrewMember &candidate) const {
-	for (int i = 0; i < crewCount; ++i) {
-		if (crew[i] && (*crew[i] == candidate)) {
-			return i;
-		}
-	}
-	return -1;
+int CFlight::FindCrewIndex(const CCrewMember& candidate) const {
+    for (int i = 0; i < crewCount; ++i) {
+        if (crew[i] && (*crew[i] == candidate)) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 // Constructor: Initializes the flight with flight info and plane
-CFlight::CFlight(const CFlightInfo &flightInfoPar, const CPlane *planePar)
+CFlight::CFlight(const CFlightInfo& flightInfoPar, const CPlane* planePar)
     : flightInfo(flightInfoPar)
     , plane(planePar)
     , crewCount(0)
@@ -23,7 +23,7 @@ CFlight::CFlight(const CFlightInfo &flightInfoPar, const CPlane *planePar)
 }
 
 // Copy constructor
-CFlight::CFlight(const CFlight &other)
+CFlight::CFlight(const CFlight& other)
     : flightInfo(other.flightInfo)
     , plane(other.plane)
     , crewCount(0)
@@ -38,7 +38,7 @@ CFlight::CFlight(const CFlight &other)
 }
 
 // Destructor
-CFlight::~CFlight() 
+CFlight::~CFlight()
 {
     for (int i = 0; i < crewCount; ++i) {
         delete crew[i];
@@ -50,37 +50,37 @@ CFlight::~CFlight()
 }
 
 // Getters
-const CFlightInfo &CFlight::GetFlightInfo() const { return flightInfo; }
-const CPlane *CFlight::GetPlane() const { return plane; }
+const CFlightInfo& CFlight::GetFlightInfo() const { return flightInfo; }
+const CPlane* CFlight::GetPlane() const { return plane; }
 int CFlight::GetCrewCount() const { return crewCount; }
 
 // Plane assignment
-void CFlight::SetPlane(const CPlane *newPlane) {
+void CFlight::SetPlane(const CPlane* newPlane) {
     plane = newPlane;
 }
 
 // Add crew member
-CFlight &CFlight::operator+(const CCrewMember &crewMember) {
+CFlight& CFlight::operator+(const CCrewMember& crewMember) {
     if (crewCount >= MAX_CREW) return *this;
     if (FindCrewIndex(crewMember) != -1) return *this;
-	CCrewMember *newMember = new CCrewMember(crewMember);
+    CCrewMember* newMember = new CCrewMember(crewMember);
     if (newMember) {
         crew[crewCount++] = newMember;
     }
-	return *this;
+    return *this;
 }
 
 // Equality by flight info
-bool CFlight::operator==(const CFlight &other) const {
+bool CFlight::operator==(const CFlight& other) const {
     return flightInfo == other.flightInfo;
 }
 
 // Stream output
-ostream &operator<<(ostream &os, const CFlight &flight) {
+ostream& operator<<(ostream& os, const CFlight& flight) {
     os << flight.flightInfo << " ";
     if (flight.plane) {
         os << *flight.plane;
-    } 
+    }
     else {
         os << "No plane assigned yet" << endl;
     }
@@ -95,7 +95,7 @@ ostream &operator<<(ostream &os, const CFlight &flight) {
 }
 
 // Copy assignment operator (Rule of Three)
-CFlight &CFlight::operator=(const CFlight &other) {
+CFlight& CFlight::operator=(const CFlight& other) {
     if (this == &other) return *this;
 
     // Copy simple members

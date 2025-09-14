@@ -4,9 +4,9 @@
 
 // Constructor: Initializes the address
 CAddress::CAddress(int houseNumberPar, const string& streetPar, const string& cityPar)
-    : city("Tel Aviv")   
-    , street("Unknown")  
-    , houseNumber(1)     
+    : city("Tel Aviv")
+    , street("Unknown")
+    , houseNumber(1)
 {
     // Apply provided values; UpdateAddress ignores any invalid fields
     UpdateAddress(cityPar, streetPar, houseNumberPar);
@@ -32,7 +32,7 @@ CAddress::CAddress(const CAddress& other)
 }
 
 // Destructor
-CAddress::~CAddress() 
+CAddress::~CAddress()
 {
     // Nothing to release
 }
@@ -56,15 +56,15 @@ int CAddress::GetHouseNumber() const
 // Updates the address with new values after validation
 void CAddress::UpdateAddress(const string& city, const string& street, int houseNumber)
 {
-    if (!city.empty())       
+    if (!city.empty())
         this->city = city;
     // else: ignore invalid (leave as-is if empty)
 
-    if (!street.empty())     
+    if (!street.empty())
         this->street = street;
     // else: ignore invalid (leave as-is if empty)
 
-    if (houseNumber > 0)     
+    if (houseNumber > 0)
         this->houseNumber = houseNumber;
     // else: ignore invalid (leave as-is if it is non positive)
 }
@@ -76,7 +76,7 @@ string CAddress::GetCurrentAddress() const {
 }
 
 // Assignment operator
-void CAddress::operator=(const CAddress &other) {
+void CAddress::operator=(const CAddress& other) {
     if (this != &other) {
         city = other.city;
         street = other.street;
@@ -85,24 +85,24 @@ void CAddress::operator=(const CAddress &other) {
 }
 
 // Equality operator
-bool CAddress::operator==(const CAddress &other) const {
+bool CAddress::operator==(const CAddress& other) const {
     return city == other.city && street == other.street &&
-            houseNumber == other.houseNumber;
+        houseNumber == other.houseNumber;
 }
 
 // Inequality operator
-bool CAddress::operator!=(const CAddress &other) const {
+bool CAddress::operator!=(const CAddress& other) const {
     return !(*this == other);
 }
 
 // Stream operators
-ostream &operator<<(ostream &os, const CAddress &address) {
+ostream& operator<<(ostream& os, const CAddress& address) {
     os << address.GetStreet() << " " << address.GetHouseNumber() << " "
         << address.GetCity();
     return os;
 }
 
-istream &operator>>(istream &is, CAddress &address) {
+istream& operator>>(istream& is, CAddress& address) {
     cout << "Please enter house number, street name and city name:" << endl;
     is >> address.houseNumber >> address.street >> address.city;
     return is;

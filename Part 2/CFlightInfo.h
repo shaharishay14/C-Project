@@ -5,54 +5,47 @@
 using namespace std;
 
 class CFlightInfo {
-    private:
-        int flightNumber;
-        string destination;
-        int durationMinutes;
-        int distanceKm;
+private:
+    int flightNumber;
+    string destination;
+    int durationMinutes;
+    int distanceKm;
 
-    public:
-        CFlightInfo() = delete; // Disables the default constructor
+public:
+    CFlightInfo() = delete; // Disables the default constructor
 
-        // Constructor: Initializes the flight info with all required details
-        CFlightInfo(const string &destination, int flightNumber, int durationMinutes,
-                    int distanceKm);
+    // Constructor: Initializes the flight info with all required details
+    CFlightInfo(const string& destination, int flightNumber, int durationMinutes,
+        int distanceKm);
 
-        // Copy constructor and destructor
-        CFlightInfo(const CFlightInfo &other);
-        ~CFlightInfo();
+    // Copy constructor and destructor
+    CFlightInfo(const CFlightInfo& other);
+    ~CFlightInfo();
 
-        // Getters
-        int GetFNum() const;
-        const string &GetDestination() const;
-        int GetDurationMinutes() const;
-        int GetDistanceKm() const;
+    // Getters
+    int GetFNum() const;
+    const string& GetDestination() const;
+    int GetDurationMinutes() const;
+    int GetDistanceKm() const;
 
-        // Setters
-        void SetDest(const string &dest);
-        void SetDurationMinutes(int minutes);
-        void SetDistanceKm(int km);
-        void SetFlightNumber(int flightNumber);
+    // Setters
+    void SetDest(const string& dest);
+    void SetDurationMinutes(int minutes);
+    void SetDistanceKm(int km);
+    void SetFlightNumber(int flightNumber);
 
-        // Check if two flight info objects are equal - Replaced with == operator
-        // bool IsEqual(const CFlightInfo &other) const;
+    // Assignment operator
+    void operator=(const CFlightInfo& other);
 
-        // Print flight information - Replaced with << operator
-        // void Print() const;
+    // Equality operator
+    bool operator==(const CFlightInfo& other) const;
 
-        // Assignment operator
-        void operator=(const CFlightInfo &other);
+    // Inequality operator
+    bool operator!=(const CFlightInfo& other) const;
 
-        // Equality operator
-        bool operator==(const CFlightInfo &other) const;
+    // Stream operators
+    friend ostream& operator<<(ostream& os, const CFlightInfo& flightInfo);
 
-        // Inequality operator
-        bool operator!=(const CFlightInfo &other) const;
-
-        // Stream operators
-        friend ostream &operator<<(ostream &os, const CFlightInfo &flightInfo);
-        // friend istream &operator>>(istream &is, CFlightInfo &flightInfo);
-
-        // Type conversion operators
-        operator int();
+    // Type conversion operators
+    operator int();
 };

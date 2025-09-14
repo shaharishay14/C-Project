@@ -3,140 +3,133 @@
 #include <iostream>
 using namespace std;
 
+#include "CPlane.h"
 #include "CFlight.h"
 #include "CFlightCompany.h"
-#include "CPlane.h"
-#include "CAddress.h"
-#include "CCrewMember.h"
+
+
 #include <iostream>
+#include "CAddress.h"
 
-int main() {
-    cout << endl << "Checking Address" << endl;
-    CAddress a(0, NULL, NULL);
-    cin >> a;
-    cout << a << endl;
+int main()
+{
+	cout << endl << "Checking Address" << endl;
+	CAddress a(0, NULL, NULL);
+	cin >> a;
+	cout << a;
 
-    cout << endl << "Checking CFlightCompany" << endl;
+	cout << endl << "Checking CFlightCompany" << endl;
 
-    CFlightCompany* pDelta = new CFlightCompany("Delta");
-    cout << endl << "First company" << endl;
-    cout << *pDelta << endl;
+	CFlightCompany* pDelta = new CFlightCompany("Delta");
+	cout << endl << "First company" << endl;
+	pDelta->Print(cout);
 
-    CCrewMember* pCmArr[3];
 
-    pCmArr[0] = new CCrewMember("Momo", 125);
-    pCmArr[1] = new CCrewMember("Gogo");
-    pCmArr[2] = new CCrewMember("Jojo", 60);
+	CCrewMember* pCmArr[3];
 
-    if (!((*pCmArr[1]) += 200)) {
-        cout << "error update minutes" << endl;
-    }
+	pCmArr[0] = new CCrewMember("Momo", 125);
+	pCmArr[1] = new CCrewMember("Gogo");
+	pCmArr[2] = new CCrewMember("Jojo", 60);
 
-    for (int i = 0; i < 3; i++) {
-        if (!pDelta->AddCrewMember(*pCmArr[i])) {
-            cout << "Problem adding crew member " << i + 1 << endl;
-        }
-    }
+	if (!((*pCmArr[1]) += 200))
+		cout << "error update minutes" << endl;
 
-    cout << "******** try adding CrewMembers again *********" << endl;
-    // Create another array that is equal to the first array
-    CCrewMember* crewsDup[3];
-    for (int i = 0; i < 3; i++) {
-        crewsDup[i] = new CCrewMember(*pCmArr[i]);
-    }
+	for (int i = 0; i < 3; i++)
+		if (!pDelta->AddCrewMember(*pCmArr[i]))
+			cout << "Problem adding crew member " << i + 1 << endl;
 
-    for (int i = 0; i < 3; i++) {
-        if (!pDelta->AddCrewMember(*pCmArr[i])) {
-            cout << "Problem adding crew member " << i + 1 << endl;
-        }
-    }
+	cout << "******** try adding CrewMembers again *********" << endl;
+	//Create another array that is equal to the first array
+	CCrewMember* crewsDup[3];
+	for (int i = 0; i < 3; i++)
+		crewsDup[i] = new CCrewMember(*pCmArr[i]);
 
-    for (int i = 0; i < 3; i++) {
-        delete crewsDup[i];
-    }
+	for (int i = 0; i < 3; i++) {
+		if (!pDelta->AddCrewMember(*pCmArr[i]))
+			cout << "Problem adding crew member " << i + 1 << endl;
+	}
 
-    for (int i = 0; i < 3; i++) {
-        delete pCmArr[i];
-    }
+	for (int i = 0; i < 3; i++)
+		delete crewsDup[i];
 
-    cout << "******** After adding Crew member *********" << endl;
-    cout << *pDelta << endl;
+	for (int i = 0; i < 3; i++)
+		delete pCmArr[i];
 
-    CPlane* pPlaneArr[2];
-    pPlaneArr[0] = new CPlane(100, "Boing373"); // seats,degem
-    pPlaneArr[1] = new CPlane(10, "Boing3");
+	cout << "******** After adding Crew member *********" << endl;
+	pDelta->Print(cout);
 
-    cout << "Before adding seats" << endl;
-    cout << *pPlaneArr[1] << endl;
 
-    // Adding seats
-    (*pPlaneArr[1])++;
-    ++(*pPlaneArr[1]);
+	CPlane* pPlaneArr[2];
+	pPlaneArr[0] = new CPlane(100, "Boing373");  //seats,degem
+	pPlaneArr[1] = new CPlane(10, "Boing3");
 
-    cout << "After adding seats" << endl;
-    cout << *pPlaneArr[1] << endl;
+	cout << "Before adding seats" << endl;
+	cout << *pPlaneArr[1];
 
-    for (int i = 0; i < 2; i++) {
-        if (!pDelta->AddPlane(*pPlaneArr[i])) {
-            cout << "Problem adding plane " << i + 1 << endl;
-        }
-    }
+	//Adding seats
+	(*pPlaneArr[1])++;
+	++(*pPlaneArr[1]);
 
-    for (int i = 0; i < 2; i++) {
-        delete pPlaneArr[i];
-    }
+	cout << "After adding seats" << endl;
+	cout << *pPlaneArr[1];
 
-    cout << "******** After adding Planes *********" << endl;
-    cout << *pDelta << endl;
+	for (int i = 0; i < 2; i++)
+		if (!pDelta->AddPlane(*pPlaneArr[i]))
+			cout << "Problem adding plane " << i + 1 << endl;
 
-    CFlightInfo fInfo1("Paris", 343, 320, 5000);
-    CFlightInfo fInfo2("Rome", 506, 220, 4000);
+	for (int i = 0; i < 2; i++)
+		delete pPlaneArr[i];
 
-    cout << fInfo1 << endl;
-    cout << fInfo2 << endl;
+	cout << "******** After adding Planes *********" << endl;
+	pDelta->Print(cout);
 
-    if (fInfo1 != fInfo2) {
-        cout << "FlightInfo not equal" << endl;
-    } else {
-        cout << "FlightInfo equal" << endl;
-    }
+	CFlightInfo fInfo1("Paris", 343, 320, 5000);
+	CFlightInfo fInfo2("Rome", 506, 220, 4000);
 
-    cout << "Flight time is: " << (int)fInfo1 << endl;
+	cout << fInfo1;
+	cout << fInfo2;
 
-    CFlight* FArr[2];
-    FArr[0] = new CFlight(fInfo1);
-    FArr[1] = new CFlight(fInfo2, pDelta->GetPlane(1));
+	if (fInfo1 != fInfo2)
+		cout << "FlightInfo not equal" << endl;
+	else
+		cout << "FlightInfo equal" << endl;
 
-    cout << "Before seting plane" << endl;
-    cout << *FArr[0] << endl;
-    FArr[0]->SetPlane(pDelta->GetPlane(0));
+	cout << "Flight time is: " << (int)fInfo1;
 
-    cout << "After seting plane " << endl;
-    cout << *FArr[0] << endl;
+	CFlight* FArr[2];
+	FArr[0] = new CFlight(fInfo1);
+	FArr[1] = new CFlight(fInfo2, pDelta->GetPlane(1));
 
-    for (int i = 0; i < 2; i++) {
-        if (!pDelta->AddFlight(*FArr[i])) {
-            cout << "Problem adding flight " << i + 1 << endl;
-        }
-    }
+	cout << "Before seting plane" << endl;
+	cout << *FArr[0];
+	FArr[0]->SetPlane(pDelta->GetPlane(0));
 
-    for (int i = 0; i < 2; i++) {
-        delete FArr[i];
-    }
+	cout << "After seting plane " << endl;
+	cout << *FArr[0];
 
-    cout << "******** After adding Flights *********" << endl;
-    cout << *pDelta << endl;
+	for (int i = 0; i < 2; i++)
+		if (!pDelta->AddFlight(*FArr[i]))
+			cout << "Problem adding flight " << i + 1 << endl;
 
-    pDelta->AddCrewToFlight(fInfo1.GetFNum(), CCrewMember::START_ID);
-    pDelta->AddCrewToFlight(fInfo1.GetFNum(), CCrewMember::START_ID + 1);
-    pDelta->AddCrewToFlight(fInfo1.GetFNum(), CCrewMember::START_ID + 2);
+	for (int i = 0; i < 2; i++)
+		delete FArr[i];
 
-    cout << "******** After adding Crew to Flight *********" << endl;
-    cout << *pDelta << endl;
+	cout << "******** After adding Flights *********" << endl;
+	pDelta->Print(cout);
 
-    delete pDelta;
 
-    return 0;
+	pDelta->AddCrewToFlight(fInfo1.GetFNum(), CCrewMember::START_ID);
+	pDelta->AddCrewToFlight(fInfo1.GetFNum(), CCrewMember::START_ID + 1);
+	pDelta->AddCrewToFlight(fInfo1.GetFNum(), CCrewMember::START_ID + 2);
 
-    system("pause");
+	cout << "******** After adding Crew to Flight *********" << endl;
+	pDelta->Print(cout);
+
+
+	delete pDelta;
+
+	system("pause");
+
+	return 0;
 }
+
