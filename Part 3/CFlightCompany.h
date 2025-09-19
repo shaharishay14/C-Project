@@ -26,7 +26,8 @@ private:
     int flightsCount;
 
     void Clear();
-    void CopyFrom(const CFlightCompany& other);
+    void CopyFrom(const CFlightCompany &other);
+
 
 public:
     CFlightCompany() = delete; // Disables the default constructor
@@ -39,7 +40,11 @@ public:
     ~CFlightCompany();
 
     // Getters
-    const string& GetName() const;
+    const string &GetName() const;
+    CCrewMember* GetCrewMember(const int index) const; // Get crew member by index
+    CFlight* GetFlightByNum(const int flightNumber) const; // Get flight by flight number
+    CPlane *GetPlane(const int index) const; // Get plane by index
+    int GetCargoCount() const; // Get cargo plane count
 
     // Setters
     void SetName(const string& newName);
@@ -68,12 +73,14 @@ public:
     // Add crew member to flight
     bool AddCrewToFlight(const int flightNumber, const int id);
 
-    // Get crew member by index
-    CCrewMember* GetCrewMember(const int id) const;
+    // Give holiday gift to all crew members
+    void CrewGetPresent();
 
-    // Get flight by index
-    CFlight* GetFlight(const int flightNumber) const;
+    // Give uniform to all crew members
+    void CrewGetUniform();
 
-    // Get plane by index
-    CPlane* GetPlane(const int index) const;
+    // Send pilots to simulator
+    void PilotsToSimulator();
+
+    void TakeOff(int flightNumber);
 };

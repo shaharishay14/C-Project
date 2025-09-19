@@ -62,9 +62,13 @@ bool CPlane::operator==(const CPlane& other) const {
 }
 
 // Stream operators
-ostream& operator<<(ostream& os, const CPlane& plane) {
-    os << "Plane" << plane.GetSerialNumber() << " Model " << plane.GetModel() << " Seats"
-        << plane.GetSeatCount() << endl;
+void CPlane::toOs(ostream &os) const {}
+
+ // Stream operators
+ostream &operator<<(ostream &os, const CPlane &plane) {
+    os << "Plane: " << plane.GetSerialNumber() << " Model: " << plane.GetModel()
+     << " Seats: " << plane.GetSeatCount() << endl;
+    plane.toOs(os);
     return os;
 }
 
@@ -75,8 +79,12 @@ const CPlane& CPlane::operator++() {
 }
 
 // Increment operator - Postfix increment
-const CPlane CPlane::operator++(int) {
-    CPlane temp = *this;
+CPlane CPlane::operator++(int) {
+    CPlane temp(*this);
     seatCount++;
     return temp;
+}
+
+CPlane* CPlane::Clone() const {
+    return new CPlane(*this);
 }

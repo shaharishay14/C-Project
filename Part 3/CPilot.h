@@ -16,9 +16,12 @@ public:
   CPilot(const string &name, bool isCaptain, CAddress *address,
          int airTime = 0);
 
+  // Constructor without address for unregistered pilots
+  CPilot(const string& name, bool isCaptain, int airTime = 0);
+
   // Copy constructor and destructor
   CPilot(const CPilot &other);
-  ~CPilot();
+  virtual ~CPilot();
 
   // Getters
   bool GetIsCaptain() const;
@@ -35,7 +38,8 @@ public:
   // Stream operators
   virtual void toOs(ostream &os) const override;
 
-
+  // Virtual functions
+  virtual CCrewMember* Clone() const override;
   void ReceiveGift(ostream &os) override;
   void ReceiveUniform(ostream &os) override;
   void ToSimulator(ostream &os) const;

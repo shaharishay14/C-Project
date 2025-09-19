@@ -21,7 +21,7 @@ public:
 
     // Copy constructor and destructor
     CPlane(const CPlane& other);
-    ~CPlane();
+    virtual ~CPlane();
 
     // Getters
     int GetSerialNumber() const;
@@ -39,11 +39,14 @@ public:
     bool operator==(const CPlane& other) const;
 
     // Stream operators
-    friend ostream& operator<<(ostream& os, const CPlane& plane);
-
+    virtual void toOs(ostream &os) const;
+    friend ostream &operator<<(ostream &os, const CPlane &plane);
+ 
     // Increment operator - Prefix increment
     const CPlane& operator++();
 
     // Increment operator - Postfix increment
-    const CPlane operator++(int);
+     CPlane operator++(int);
+
+    virtual CPlane* Clone() const ;
 };

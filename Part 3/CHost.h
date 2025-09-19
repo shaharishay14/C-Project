@@ -12,12 +12,16 @@ private:
 public:
   CHost() = delete; // Disables the default constructor
 
+  // Constructor: Initializes the host with name and host type
+  CHost(const string &name, eHostType hostType);
+  
   // Constructor: Initializes the host with name, host type, address and optional air time
-  CHost(const string &name, eHostType hostType, CAddress *address, int airTime = 0);
+  CHost(const string &name, eHostType hostType, CAddress *address,
+        int airTime = 0);
 
   // Copy constructor and destructor
   CHost(const CHost &other);
-  ~CHost();
+  virtual ~CHost();
 
   // Getters
   eHostType GetHostType() const;
@@ -32,6 +36,7 @@ public:
   virtual void toOs(ostream &os) const override;
 
   // Virtual functions
+  virtual CCrewMember* Clone() const override;
   void ReceiveGift(ostream &os) override;
   void ReceiveUniform(ostream &os) override;
 

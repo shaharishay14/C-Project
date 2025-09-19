@@ -9,6 +9,8 @@ CCrewMember::CCrewMember(const string &namePar, CAddress *addressPar,
       airTime(0) {
   SetName(namePar);       // ignores invalid
   operator+=(airTimePar); // ignores invalid
+  SetAddress(addressPar);
+
 }
 
 // Constructor: Initializes the crew member with name and optional air time
@@ -27,7 +29,7 @@ CCrewMember::CCrewMember(const CCrewMember &other)
 
 // Destructor
 CCrewMember::~CCrewMember() {
-  // Nothing to release
+  address = nullptr;
 }
 
 // Getters
@@ -70,6 +72,11 @@ bool CCrewMember::operator+=(int deltaMinutes) {
 bool CCrewMember::operator==(const CCrewMember &other) const {
   return name == other.name;
 }
+
+void CCrewMember::Print(ostream &os) const {
+  toOs(os);  // Call the virtual function implemented in derived classes
+}
+
 
 void CCrewMember::toOs(ostream &os) const {}
 

@@ -18,7 +18,7 @@ const int CM_COUNT = 5;
 const int PLANE_COUNT = 4;
 const int FLIGHT_COUNT = 4;
 
-void main()
+int main()
 {
 	CFlightCompany Delta("Delta");
 	CAddress ad1(34,"DZ");
@@ -177,10 +177,12 @@ void main()
 	cout << "Delta has " <<  Delta.GetCargoCount() << " cargo planes"<<endl;
 
 	cout << "******** final flight company print *********"<<endl;
+	
 	Delta.Print(cout);
 	cout << "********  *********"<<endl;
 
 
 
 	system("pause");
+	return 0;
 }

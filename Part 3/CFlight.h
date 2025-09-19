@@ -18,8 +18,7 @@ private:
     CCrewMember* crew[MAX_CREW];
     int crewCount;
 
-    int FindCrewIndex(const CCrewMember& candidate) const;
-
+    int FindCrewIndex(const CCrewMember &candidate) const;
 
 public:
     CFlight() = delete; // Disables default constructor
@@ -35,6 +34,7 @@ public:
     const CFlightInfo& GetFlightInfo() const;
     const CPlane* GetPlane() const;
     int GetCrewCount() const;
+    CCrewMember* GetCrewMember(int index) const;
 
     // Update plane assignment (can set nullptr)
     void SetPlane(const CPlane* newPlane);
@@ -43,11 +43,17 @@ public:
     CFlight& operator=(const CFlight& other);
 
     // Add crew member (by copy) if space and not already exists (by name)
-    CFlight& operator+(const CCrewMember& crewMember);
+    CFlight &operator+(const CCrewMember &crewMember);
+    CFlight &operator+(CCrewMember *crewMember);
 
     // Equality by flight info
     bool operator==(const CFlight& other) const;
 
     // Stream output
-    friend ostream& operator<<(ostream& os, const CFlight& flight);
+    friend ostream &operator<<(ostream &os, const CFlight &flight);
+
+    // Helper to count pilots and superior hosts
+    void CountPilotsAndSuperiorHosts(int &pilotCount, int &superiorHostCount) const;
+
+    bool TakeOff();
 };

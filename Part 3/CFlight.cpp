@@ -1,5 +1,8 @@
 #include "CFlight.h"
 #include "CCrewMember.h"
+#include "CPilot.h"
+#include "CHost.h"
+#include "CCargo.h"
 
 // Helper: find crew index; returns -1 if not found
 int CFlight::FindCrewIndex(const CCrewMember& candidate) const {
@@ -9,6 +12,20 @@ int CFlight::FindCrewIndex(const CCrewMember& candidate) const {
         }
     }
     return -1;
+}
+
+
+// Helper to count pilots and superior hosts
+void CFlight::CountPilotsAndSuperiorHosts(int& pilotCount, int& superiorHostCount) const {
+    for (int i = 0; i < crewCount; ++i) {
+        if (crew[i]) {
+            if (typeid(*crew[i]) == typeid(CPilot)) { ++pilotCount; }
+            if (typeid(*crew[i]) == typeid(CHost) && 
+                dynamic_cast<CHost*>(crew[i])->GetHostType() == CHost::eSuper) { 
+                ++superiorHostCount; 
+            }
+        }
+    }
 }
 
 // Constructor: Initializes the flight with flight info and plane
@@ -32,7 +49,7 @@ CFlight::CFlight(const CFlight& other)
         crew[i] = nullptr;
     }
     for (int i = 0; i < other.crewCount; ++i) {
-        crew[i] = new CCrewMember(*other.crew[i]);
+        crew[i] = other.crew[i]->Clone();
     }
     crewCount = other.crewCount;
 }
@@ -53,6 +70,7 @@ CFlight::~CFlight()
 const CFlightInfo& CFlight::GetFlightInfo() const { return flightInfo; }
 const CPlane* CFlight::GetPlane() const { return plane; }
 int CFlight::GetCrewCount() const { return crewCount; }
+CCrewMember* CFlight::GetCrewMember(int index) const { return crew[index]; }
 
 // Plane assignment
 void CFlight::SetPlane(const CPlane* newPlane) {
@@ -63,7 +81,17 @@ void CFlight::SetPlane(const CPlane* newPlane) {
 CFlight& CFlight::operator+(const CCrewMember& crewMember) {
     if (crewCount >= MAX_CREW) return *this;
     if (FindCrewIndex(crewMember) != -1) return *this;
-    CCrewMember* newMember = new CCrewMember(crewMember);
+    CCrewMember* newMember = crewMember.Clone();
+    if (newMember) {
+        crew[crewCount++] = newMember;
+    }
+    return *this;
+}
+
+CFlight& CFlight::operator+(CCrewMember *crewMember) {
+    if (crewCount >= MAX_CREW) return *this;
+    if (FindCrewIndex(*crewMember) != -1) return *this;
+    CCrewMember* newMember = crewMember->Clone();
     if (newMember) {
         crew[crewCount++] = newMember;
     }
@@ -111,9 +139,36 @@ CFlight& CFlight::operator=(const CFlight& other) {
 
     // Deep copy crew
     for (int i = 0; i < other.crewCount; ++i) {
-        crew[i] = new CCrewMember(*other.crew[i]);
+        crew[i] = other.crew[i]->Clone();
     }
     crewCount = other.crewCount;
 
     return *this;
+}
+
+bool CFlight::TakeOff() {
+  if (plane == nullptr) return false;
+
+  int minutes = GetFlightInfo().GetDurationMinutes();  
+  int pilotCount = 0;
+  int superiorHostCount = 0;
+  CountPilotsAndSuperiorHosts(pilotCount, superiorHostCount);
+
+  if (typeid(*plane) == typeid(CCargo)) {
+    // plane is cargo
+    const CCargo *cargo = dynamic_cast<const CCargo *>(plane);
+    cargo->UpdateMinutesMessage(minutes, cout);
+    if (pilotCount < 1)
+      return false;
+  } else {
+    // plane is not cargo
+    if (pilotCount != 1 || superiorHostCount != 1) return false;
+  }
+
+  // update crew minutes
+  for (int i = 0; i < crewCount; ++i) {
+    crew[i]+=(minutes);
+  }
+
+  return true;
 }

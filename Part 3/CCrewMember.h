@@ -6,7 +6,7 @@
 
 class CCrewMember {
 protected:
-  static int nextId;
+
   string name;
   CAddress *address;
   int airTime;
@@ -25,7 +25,7 @@ public:
 
   // Copy-ctor & Dtor
   CCrewMember(const CCrewMember &other);
-  ~CCrewMember();
+  virtual ~CCrewMember();
 
   // Getters
   const string &GetName() const;
@@ -48,10 +48,12 @@ public:
   bool operator==(const CCrewMember &other) const;
 
   // Stream operators
-  virtual void toOs(ostream &os) const;
+  void Print(ostream &os) const;
+  virtual void toOs(ostream &os) const = 0;
   friend ostream &operator<<(ostream &os, const CCrewMember &crewMember);
 
   // Virtual functions
+  virtual CCrewMember* Clone() const = 0;
   virtual void ReceiveGift(ostream &os) = 0;
   virtual void ReceiveUniform(ostream &os) = 0;
 };

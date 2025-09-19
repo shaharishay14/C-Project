@@ -100,8 +100,8 @@ bool CFlightInfo::operator!=(const CFlightInfo& other) const {
 
 // Stream operators
 ostream& operator<<(ostream& os, const CFlightInfo& flightInfo) {
-    os << "Flight info dest: " << flightInfo.GetDestination() << " Number"
-        << to_string(flightInfo.GetFNum()) << " Minutes"
+    os << "Flight info dest: " << flightInfo.GetDestination() << " Number "
+        << to_string(flightInfo.GetFNum()) << " Minutes "
         << to_string(flightInfo.GetDurationMinutes()) << " "
         << to_string(flightInfo.GetDistanceKm()) << " KM" << endl;
     return os;
