@@ -1,12 +1,19 @@
 #pragma once
 
 #include "CFlightCompException.h"
+#include <string>
+#include <iostream>
+
+using namespace std;
 
 class CCompStringException : public CFlightCompException {
 private:
-  string errorMessage;
+    string problem;
 
 public:
-  CCompStringException(const string& errorMessage) : errorMessage(errorMessage) {}
-  virtual const string show() const override { return errorMessage + "\n"; }
+    CCompStringException(const string& problem) : problem(problem) {}
+    
+    virtual void Show() const override {
+        cout << "String Exception: " << problem << endl;
+    }
 };

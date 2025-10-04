@@ -1,4 +1,7 @@
 #include "CCrewMember.h"
+#include "CCompStringException.h"
+#include "CCompLimitException.h"
+#include "CCompFileException.h"
 
 
 // Constructor: Initializes the crew member  with name and address and air time
@@ -7,8 +10,8 @@ CCrewMember::CCrewMember(const string& namePar, CAddress* addressPar,
     : name("Unknown"),
     address(nullptr),
     airTime(0) {
-    SetName(namePar);       // ignores invalid
-    operator+=(airTimePar); // ignores invalid
+    SetName(namePar);       
+    operator+=(airTimePar); 
     SetAddress(addressPar);
 
 }
@@ -17,8 +20,8 @@ CCrewMember::CCrewMember(const string& namePar, CAddress* addressPar,
 CCrewMember::CCrewMember(const string& namePar, int airTimePar)
     : name("Unknown"), address(new CAddress(1, "Unknown")), airTime(0)
 {
-    SetName(namePar);       // ignores invalid
-    operator+=(airTimePar); // ignores invalid
+    SetName(namePar);       // Will throw exception if name is empty
+    operator+=(airTimePar); // Will throw exception if airTime is negative
 }
 
 // Copy constructor
@@ -42,9 +45,10 @@ const CAddress* CCrewMember::GetAddress() const { return address; }
 
 // Setters
 void CCrewMember::SetName(const string& newName) {
-    if (!newName.empty())
-        name = newName;
-    // else: ignore invalid (leave as-is if empty)
+    if (newName.empty()) {
+        throw CCompStringException("Crew member name cannot be empty");
+    }
+    name = newName;
 }
 
 void CCrewMember::SetAddress(CAddress* newAddress) {
@@ -63,8 +67,9 @@ void CCrewMember::operator=(const CCrewMember& other) {
 
 
 bool CCrewMember::operator+=(int deltaMinutes) {
-    if (deltaMinutes < 0)
-        return false;
+    if (deltaMinutes < 0) {
+        throw CCompStringException("Delta minutes cannot be negative: " + to_string(deltaMinutes));
+    }
     airTime += deltaMinutes;
     return true;
 }

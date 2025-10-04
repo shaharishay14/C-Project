@@ -3,8 +3,6 @@
 
 #include "CAddress.h"
 #include "CCompStringException.h"
-#include "CCompLimitExecption.h"
-#include "CCompFileException.h"
 
 // Constructor: Initializes the address
 CAddress::CAddress(int houseNumberPar, const string& streetPar, const string& cityPar)
@@ -60,23 +58,20 @@ int CAddress::GetHouseNumber() const
 // Updates the address with new values after validation
 void CAddress::UpdateAddress(const string& city, const string& street, int houseNumber) noexcept(false)
 {
-    if (!city.empty())
-        this->city = city;
-    else {
-      throw CCompStringException("City cannot be empty");
-     };
+    if (city.empty()) {
+        throw CCompStringException("City cannot be empty");
+    }
+    this->city = city;
 
-    if (!street.empty())
-        this->street = street;
-    else {
-      throw CCompStringException("Street cannot be empty");
-    };
+    if (street.empty()) {
+        throw CCompStringException("Street cannot be empty");
+    }
+    this->street = street;
 
-    if (houseNumber > 0)
-        this->houseNumber = houseNumber;
-    else {
-      throw invalid_argument("House number must be positive");
-    };
+    if (houseNumber <= 0) {
+        throw invalid_argument("House number must be positive: " + to_string(houseNumber));
+    }
+    this->houseNumber = houseNumber;
 }
 
 
@@ -114,6 +109,28 @@ ostream& operator<<(ostream& os, const CAddress& address) {
 
 istream& operator>>(istream& is, CAddress& address) {
     cout << "Please enter house number, street name and city name:" << endl;
-    is >> address.houseNumber >> address.street >> address.city;
+    
+    bool validInput = false;
+    while (!validInput) {
+        try {
+            is >> address.houseNumber >> address.street >> address.city;
+            
+            // Validate the input using UpdateAddress
+            address.UpdateAddress(address.city, address.street, address.houseNumber);
+            validInput = true;  // If we reach here, input is valid
+        }
+        catch (const CCompStringException& e) {
+            cout << "Input error: ";
+            e.Show();
+            cout << "Please try again: ";
+            is.clear();
+        }
+        catch (const invalid_argument& e) {
+            cout << "Input error: " << e.what() << endl;
+            cout << "Please try again: ";
+            is.clear();
+        }
+    }
+    
     return is;
 }

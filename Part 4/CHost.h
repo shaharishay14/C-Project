@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CCrewMember.h"
+#include "CFlightCompException.h"
 
 class CHost : public CCrewMember {
 public:
@@ -18,6 +19,9 @@ public:
     // Constructor: Initializes the host with name, host type, address and optional air time
     CHost(const string& name, eHostType hostType, CAddress* address,
         int airTime = 0);
+    
+    // File constructor
+    CHost(ifstream& inFile);
 
     // Copy constructor and destructor
     CHost(const CHost& other);

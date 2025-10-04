@@ -5,12 +5,23 @@
 CPilot::CPilot(const string& name, bool isCaptain, CAddress* address,
     int airTime)
     : CCrewMember(name, address, airTime) {
-    SetIsCaptain(isCaptain);
+    SetIsCaptain(isCaptain);  // Will throw exception if parameters are invalid
 }
 
 // Constructor without address
 CPilot::CPilot(const string& name, bool isCaptain, int airTime)
     : CCrewMember(name, nullptr, airTime), isCaptain(isCaptain) {
+    // Will throw exception if parameters are invalid through parent constructor
+}
+
+// File constructor
+CPilot::CPilot(ifstream& inFile) : CCrewMember("", nullptr, 0) {
+    string name;
+    int airTime;
+    inFile >> name >> airTime;
+    SetName(name);
+    SetAirTime(airTime);
+    isCaptain = true; // Default to captain
 }
 
 // Copy constructor
@@ -41,6 +52,9 @@ void CPilot::operator=(const CPilot& other) {
 
 // Addition operator
 bool CPilot::operator+=(int deltaMinutes) {
+    if (deltaMinutes < 0) {
+        throw invalid_argument("Delta minutes cannot be negative: " + to_string(deltaMinutes));
+    }
     int total = isCaptain ? deltaMinutes + static_cast<int>(floor(deltaMinutes * 0.1)) : deltaMinutes;
     return CCrewMember::operator+=(total);
 }

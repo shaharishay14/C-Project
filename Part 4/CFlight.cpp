@@ -3,6 +3,10 @@
 #include "CPilot.h"
 #include "CHost.h"
 #include "CCargo.h"
+#include "CCompStringException.h"
+#include "CCompLimitException.h"
+#include "CCompFileException.h"
+#include <typeinfo>
 
 // Helper: find crew index; returns -1 if not found
 int CFlight::FindCrewIndex(const CCrewMember& candidate) const {
@@ -39,6 +43,17 @@ CFlight::CFlight(const CFlightInfo& flightInfoPar, const CPlane* planePar)
     }
 }
 
+// File constructor
+CFlight::CFlight(ifstream& inFile) : plane(nullptr), crewCount(0) {
+    // Load flight info from file
+    flightInfo = CFlightInfo(inFile);
+    
+    // Initialize crew array
+    for (int i = 0; i < MAX_CREW; ++i) {
+        crew[i] = nullptr;
+    }
+}
+
 // Copy constructor
 CFlight::CFlight(const CFlight& other)
     : flightInfo(other.flightInfo)
@@ -69,7 +84,12 @@ CFlight::~CFlight()
 const CFlightInfo& CFlight::GetFlightInfo() const { return flightInfo; }
 const CPlane* CFlight::GetPlane() const { return plane; }
 int CFlight::GetCrewCount() const { return crewCount; }
-CCrewMember* CFlight::GetCrewMember(int index) const { return crew[index]; }
+CCrewMember* CFlight::GetCrewMember(int index) const { 
+    if (index < 0 || index >= crewCount) {
+        throw CCompLimitException(crewCount - 1);
+    }
+    return crew[index]; 
+}
 
 // Plane assignment
 void CFlight::SetPlane(const CPlane* newPlane) {
@@ -78,17 +98,27 @@ void CFlight::SetPlane(const CPlane* newPlane) {
 
 // Add crew member using reference
 CFlight& CFlight::operator+(const CCrewMember& crewMember) {
-    if (crewCount < MAX_CREW && FindCrewIndex(crewMember) == -1) {
-		crew[crewCount++] = crewMember.Clone();
+    if (crewCount >= MAX_CREW) {
+        throw CCompLimitException(MAX_CREW);
     }
+    if (FindCrewIndex(crewMember) != -1) {
+        throw CCompStringException("Crew member already exists in flight");
+    }
+    crew[crewCount++] = crewMember.Clone();
     return *this;
 }
 
 // Add crew member using pointer
 CFlight& CFlight::operator+(CCrewMember* crewMember) {
-    if (crewCount >= MAX_CREW) return *this;
-    if (FindCrewIndex(*crewMember) != -1) return *this;
-    if (!crewMember) return *this;
+    if (crewCount >= MAX_CREW) {
+        throw CCompLimitException(MAX_CREW);
+    }
+    if (FindCrewIndex(*crewMember) != -1) {
+        throw CCompStringException("Crew member already exists in flight");
+    }
+    if (!crewMember) {
+        throw CCompStringException("Cannot add null crew member");
+    }
     crew[crewCount++] = crewMember;
     return *this;
 }
@@ -142,7 +172,9 @@ CFlight& CFlight::operator=(const CFlight& other) {
 }
 
 bool CFlight::TakeOff() {
-    if (plane == nullptr) return false;
+    if (plane == nullptr) {
+        throw CCompStringException("Cannot take off: No plane assigned");
+    }
 
     int minutes = GetFlightInfo().GetDurationMinutes();
     int pilotCount = 0;
@@ -153,12 +185,18 @@ bool CFlight::TakeOff() {
         // plane is cargo
         const CCargo* cargo = dynamic_cast<const CCargo*>(plane);
         cargo->UpdateMinutesMessage(minutes, cout);
-        if (pilotCount < 1)
-            return false;
+        if (pilotCount < 1) {
+            throw CCompStringException("Cannot take off: Cargo plane requires at least 1 pilot");
+        }
     }
     else {
         // plane is not cargo
-        if (pilotCount != 1 || superiorHostCount != 1) return false;
+        if (pilotCount != 1) {
+            throw CCompStringException("Cannot take off: Non-cargo plane requires exactly 1 pilot");
+        }
+        if (superiorHostCount != 1) {
+            throw CCompStringException("Cannot take off: Non-cargo plane requires exactly 1 superior host");
+        }
     }
 
     // update crew minutes

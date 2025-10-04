@@ -3,18 +3,28 @@
 // Constructor: Initializes the host with name, host type, address and optional air time
 CHost::CHost(const string& name, eHostType hostType, CAddress* address, int airTime)
     : CCrewMember(name, address, airTime) {
-    SetHostType(hostType);
+    SetHostType(hostType);  // Will throw exception if hostType is invalid
 }
 
 // Constructor: Initializes the host with name and host type
 CHost::CHost(const string& name, eHostType hostType)
     : CCrewMember(name, 0) {
-    SetHostType(hostType);
+    SetHostType(hostType);  // Will throw exception if hostType is invalid
+}
+
+// File constructor
+CHost::CHost(ifstream& inFile) : CCrewMember("", nullptr, 0) {
+    string name;
+    int airTime;
+    inFile >> name >> airTime;
+    SetName(name);
+    SetAirTime(airTime);
+    hostType = eRegular; // Default to regular
 }
 
 // Copy constructor
 CHost::CHost(const CHost& other) : CCrewMember(other) {
-    SetHostType(other.hostType);
+    SetHostType(other.hostType);  
 }
 
 // Destructor
@@ -22,6 +32,9 @@ CHost::~CHost() {}
 
 // Setters
 void CHost::SetHostType(eHostType hostType) {
+    if (hostType < eRegular || hostType >= eNumOfTypes) {
+        throw invalid_argument("Invalid host type: " + to_string(hostType) + " (valid range: 0-" + to_string(eNumOfTypes - 1) + ")");
+    }
     this->hostType = hostType;
 }
 

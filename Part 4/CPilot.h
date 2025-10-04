@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CCrewMember.h"
+#include "CFlightCompException.h"
 
 using namespace std;
 
@@ -18,6 +19,9 @@ public:
 
     // Constructor without address for unregistered pilots
     CPilot(const string& name, bool isCaptain, int airTime = 0);
+    
+    // File constructor
+    CPilot(ifstream& inFile);
 
     // Copy constructor and destructor
     CPilot(const CPilot& other);

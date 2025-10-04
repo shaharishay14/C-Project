@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CPlane.h"
+#include "CFlightCompException.h"
 
 class CCargo : public CPlane {
 private:
@@ -14,6 +15,9 @@ public:
 
     // Constructor: Initializes the cargo with seats, model, max kg and max volume
     CCargo(int seats, const string& model, float maxKg, float maxVolume);
+    
+    // File constructor
+    CCargo(ifstream& inFile);
 
     // Copy constructor and destructor
     CCargo(const CCargo& other);

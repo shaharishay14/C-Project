@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include "CFlightCompException.h"
 
 class CCrewMember;
 class CPlane;
@@ -34,6 +35,9 @@ public:
 
     // Constructor: Initializes the flight company with a name
     CFlightCompany(const string& name);
+    
+    // Constructor: Initializes the flight company from file
+    CFlightCompany(const string& filename, int dummy);
 
     // Copy constructor and destructor
     CFlightCompany(const CFlightCompany& other);
@@ -57,6 +61,14 @@ public:
 
     // Equality operator
     bool operator==(const CFlightCompany& other) const;
+
+    // Array access operator
+    CPlane& operator[](int index);
+    const CPlane& operator[](int index) const;
+    
+    // File I/O methods
+    void SaveToFile(const string& filename) const;
+    void LoadFromFile(const string& filename);
 
     // Stream operators
     friend ostream& operator<<(ostream& os, const CFlightCompany& flightCompany);

@@ -4,6 +4,12 @@
 #include "CFlight.h"
 #include "CPilot.h"
 #include "CCargo.h"
+#include "CCompStringException.h"
+#include "CCompLimitException.h"
+#include "CCompFileException.h"
+#include "CPlaneCrewFactory.h"
+#include <fstream>
+#include <iostream>
 
 // Clear the flight company
 void CFlightCompany::Clear() {
@@ -58,6 +64,33 @@ CFlightCompany::CFlightCompany(const string& namePar)
     }
 }
 
+// Constructor: Initializes the flight company from file
+CFlightCompany::CFlightCompany(const string& filename, int dummy)
+    : name("Unknown")
+    , crewsCount(0)
+    , planesCount(0)
+    , flightsCount(0)
+{
+    // Initialize arrays
+    for (int i = 0; i < MAX_CREWS; i++) {
+        crews[i] = nullptr;
+    }
+    for (int i = 0; i < MAX_PLANES; i++) {
+        planes[i] = nullptr;
+    }
+    for (int i = 0; i < MAX_FLIGHTS; i++) {
+        flights[i] = nullptr;
+    }
+    
+    // Try to load from file, if file doesn't exist, use default name
+    try {
+        LoadFromFile(filename);
+    } catch (const CCompFileException& e) {
+        // File doesn't exist, use default name
+        SetName(filename);
+    }
+}
+
 // Copy constructor
 CFlightCompany::CFlightCompany(const CFlightCompany& other)
     : name(other.name), crewsCount(0), planesCount(0), flightsCount(0)
@@ -79,11 +112,10 @@ const string& CFlightCompany::GetName() const { return name; }
 // Setters
 void CFlightCompany::SetName(const string& newName)
 {
-    if (!newName.empty())
-    {
-        name = newName;
+    if (newName.empty()) {
+        throw CCompStringException("Flight company name cannot be empty");
     }
-    // else: ignore invalid (leave as-is if empty)
+    name = newName;
 }
 
 // Print the flight company details
@@ -119,6 +151,28 @@ bool CFlightCompany::operator==(const CFlightCompany& other) const {
     return name == other.name;
 }
 
+// Array access operator - non-const version (allows modification)
+CPlane& CFlightCompany::operator[](int index) {
+    if (index < 0 || index >= planesCount) {
+        throw CCompLimitException(planesCount - 1);
+    }
+    if (planes[index] == nullptr) {
+        throw CCompStringException("Plane at index " + to_string(index) + " is null");
+    }
+    return *planes[index];
+}
+
+// Array access operator - const version (read-only)
+const CPlane& CFlightCompany::operator[](int index) const {
+    if (index < 0 || index >= planesCount) {
+        throw CCompLimitException(planesCount - 1);
+    }
+    if (planes[index] == nullptr) {
+        throw CCompStringException("Plane at index " + to_string(index) + " is null");
+    }
+    return *planes[index];
+}
+
 // Stream operators
 ostream& operator<<(ostream& os, const CFlightCompany& fc) {
     fc.Print(os);
@@ -127,13 +181,14 @@ ostream& operator<<(ostream& os, const CFlightCompany& fc) {
 
 // Add crew member using reference
 bool CFlightCompany::AddCrewMember(const CCrewMember& crewMember) {
-    if (crewsCount >= MAX_CREWS) { return false; }
+    if (crewsCount >= MAX_CREWS) { 
+        throw CCompLimitException(MAX_CREWS);
+    }
 
     // Check for duplicates (added check by name)
     for (int i = 0; i < crewsCount; ++i) {
-        CCrewMember* temp = GetCrewMember(i);
-        if (temp && temp->GetName() == crewMember.GetName()) {
-            return false;
+        if (crews[i] && crews[i]->GetName() == crewMember.GetName()) {
+            throw CCompStringException("Crew member with name '" + crewMember.GetName() + "' already exists");
         }
     }
     crews[crewsCount++] = crewMember.Clone();
@@ -142,8 +197,12 @@ bool CFlightCompany::AddCrewMember(const CCrewMember& crewMember) {
 
 
 CCrewMember* CFlightCompany::GetCrewMember(const int index) const {
-    if (index < 0 || index >= MAX_CREWS) return nullptr;
-    if (crews[index] == nullptr) return nullptr;
+    if (index < 0 || index >= crewsCount) {
+        throw CCompLimitException(crewsCount - 1);
+    }
+    if (crews[index] == nullptr) {
+        throw CCompStringException("Crew member at index " + to_string(index) + " is null");
+    }
     return crews[index];
 }
 
@@ -158,9 +217,13 @@ CFlight* CFlightCompany::GetFlightByNum(const int flightNumber) const {
 bool CFlightCompany::AddCrewToFlight(const int flightNumber, const int id)
 {
     CFlight* flight = GetFlightByNum(flightNumber);
-    if (flight == nullptr) return false;
+    if (flight == nullptr) {
+        throw CCompStringException("Flight with number " + to_string(flightNumber) + " not found");
+    }
     CCrewMember* crewMember = GetCrewMember(id);
-    if (crewMember == nullptr) return false;
+    if (crewMember == nullptr) {
+        throw CCompStringException("Crew member with id " + to_string(id) + " not found");
+    }
 
     int before = flight->GetCrewCount();
     *flight + *crewMember;
@@ -168,18 +231,22 @@ bool CFlightCompany::AddCrewToFlight(const int flightNumber, const int id)
 }
 
 CPlane* CFlightCompany::GetPlane(const int index) const {
-    if (index < 0 || index >= MAX_PLANES) return nullptr;
-    if (planes[index] == nullptr) return nullptr;
+    if (index < 0 || index >= planesCount) {
+        throw CCompLimitException(planesCount - 1);
+    }
+    if (planes[index] == nullptr) {
+        throw CCompStringException("Plane at index " + to_string(index) + " is null");
+    }
     return planes[index];
 }
 
 bool CFlightCompany::AddPlane(const CPlane& plane) {
-    if (planesCount >= MAX_PLANES)
-        return false;
+    if (planesCount >= MAX_PLANES) {
+        throw CCompLimitException(MAX_PLANES);
+    }
     for (int i = 0; i < planesCount; i++) {
-        CPlane* temp = GetPlane(i);
-        if (temp && *temp == plane) {
-            return false;
+        if (planes[i] && *planes[i] == plane) {
+            throw CCompStringException("Plane already exists in company");
         }
     }
     planes[planesCount++] = plane.Clone();
@@ -188,16 +255,18 @@ bool CFlightCompany::AddPlane(const CPlane& plane) {
 
 
 bool CFlightCompany::AddFlight(const CFlight& flight) {
-    if (flightsCount >= MAX_FLIGHTS) return false;
-    CFlight* newFlight = GetFlightByNum(flight.GetFlightInfo().GetFNum());
-    if (newFlight == nullptr) {
-        newFlight = new CFlight(flight);
-        if (newFlight) {
-            flights[flightsCount++] = newFlight;
-        }
-        return true;
+    if (flightsCount >= MAX_FLIGHTS) {
+        throw CCompLimitException(MAX_FLIGHTS);
     }
-    return false;
+    CFlight* existingFlight = GetFlightByNum(flight.GetFlightInfo().GetFNum());
+    if (existingFlight != nullptr) {
+        throw CCompStringException("Flight with number " + to_string(flight.GetFlightInfo().GetFNum()) + " already exists");
+    }
+    CFlight* newFlight = new CFlight(flight);
+    if (newFlight) {
+        flights[flightsCount++] = newFlight;
+    }
+    return true;
 }
 
 int CFlightCompany::GetCargoCount() const {
@@ -231,6 +300,154 @@ void CFlightCompany::PilotsToSimulator() {
             }
         }
     }
+}
+
+// Save company data to file
+void CFlightCompany::SaveToFile(const string& filename) const {
+    ofstream outFile(filename);
+    if (!outFile.is_open()) {
+        throw CCompFileException(filename);
+    }
+    
+    // Save company name
+    outFile << name << endl;
+    
+    // Save crew count and crew members
+    outFile << crewsCount << endl;
+    for (int i = 0; i < crewsCount; i++) {
+        if (crews[i]) {
+            outFile << i << " " << crews[i]->GetName() << " " << crews[i]->GetAirTime() << " ";
+            if (dynamic_cast<const CPilot*>(crews[i])) {
+                outFile << ePilot << endl;
+            } else {
+                const CHost* host = dynamic_cast<const CHost*>(crews[i]);
+                outFile << eHost << " " << host->GetHostType() << " ";
+                if (host->GetAddress()) {
+                    outFile << host->GetAddress()->GetCity() << " " 
+                           << host->GetAddress()->GetStreet() << " " 
+                           << host->GetAddress()->GetHouse() << endl;
+                } else {
+                    outFile << "default default 1" << endl;
+                }
+            }
+        }
+    }
+    
+    // Save plane count and planes
+    outFile << planesCount << endl;
+    for (int i = 0; i < planesCount; i++) {
+        if (planes[i]) {
+            outFile << i << " " << planes[i]->GetSerialNumber() << " " 
+                   << planes[i]->GetSeatCount() << " " << planes[i]->GetModel() << " ";
+            if (dynamic_cast<const CCargo*>(planes[i])) {
+                const CCargo* cargo = dynamic_cast<const CCargo*>(planes[i]);
+                outFile << cargo->GetMaxKg() << " " << cargo->GetMaxVolume() << " ";
+                outFile << cargo->GetCurrentKg() << " " << cargo->GetCurrentVolume() << endl;
+            } else {
+                outFile << endl;
+            }
+        }
+    }
+    
+    // Save the last serial number for planes (format: maxSerial   1000  0 0)
+    CPlane::SaveLastSerialNumber(outFile);
+    outFile << "   1000  0 0" << endl;
+    
+    // Save flight count and flights
+    outFile << flightsCount << endl;
+    for (int i = 0; i < flightsCount; i++) {
+        if (flights[i]) {
+            const CFlightInfo& info = flights[i]->GetFlightInfo();
+            outFile << info.GetDestination() << " " << info.GetFNum() << " " 
+                   << info.GetDurationMinutes() << " " << info.GetDistanceKm() << " ";
+            outFile << flights[i]->GetCrewCount() << " " << flights[i]->GetPlane()->GetSeatCount() << endl;
+        }
+    }
+    
+    // Save crew assignments for each flight
+    for (int i = 0; i < flightsCount; i++) {
+        if (flights[i]) {
+            outFile << flights[i]->GetCrewCount() << endl;
+            for (int j = 0; j < flights[i]->GetCrewCount(); j++) {
+                CCrewMember* crew = flights[i]->GetCrewMember(j);
+                if (crew) {
+                    outFile << j << " " << crew->GetName() << " " << crew->GetAirTime() << " ";
+                    if (dynamic_cast<const CPilot*>(crew)) {
+                        outFile << ePilot << endl;
+                    } else {
+                        const CHost* host = dynamic_cast<const CHost*>(crew);
+                        outFile << eHost << " " << host->GetHostType() << " ";
+                        if (host->GetAddress()) {
+                            outFile << host->GetAddress()->GetCity() << " " 
+                                   << host->GetAddress()->GetStreet() << " " 
+                                   << host->GetAddress()->GetHouse() << endl;
+                        } else {
+                            outFile << "default default 1" << endl;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    outFile.close();
+}
+
+// Load company data from file
+void CFlightCompany::LoadFromFile(const string& filename) {
+    ifstream inFile(filename);
+    if (!inFile.is_open()) {
+        throw CCompFileException(filename);
+    }
+    
+    // Clear existing data
+    Clear();
+    
+    // Load company name
+    inFile >> name;
+    
+    // Load crew count and crew members
+    inFile >> crewsCount;
+    for (int i = 0; i < crewsCount; i++) {
+        crews[i] = CPlaneCrewFactory::GetCrewMemberFromFile(inFile);
+    }
+    
+    // Load plane count and planes
+    inFile >> planesCount;
+    for (int i = 0; i < planesCount; i++) {
+        planes[i] = CPlaneCrewFactory::GetPlaneFromFile(inFile);
+    }
+    
+    // Load the last serial number for planes (format: maxSerial   1000  0 0)
+    CPlane::LoadLastSerialNumber(inFile);
+    int dummy1, dummy2, dummy3;
+    inFile >> dummy1 >> dummy2 >> dummy3;
+    
+    // Load flight count and flights
+    inFile >> flightsCount;
+    for (int i = 0; i < flightsCount; i++) {
+        string dest;
+        int fnum, duration, distance, crewCount, planeSeats;
+        inFile >> dest >> fnum >> duration >> distance >> crewCount >> planeSeats;
+        
+        CFlightInfo info(dest, fnum, duration, distance);
+        CFlight* flight = new CFlight(info, planes[0]); // Use first plane as default
+        flights[i] = flight;
+    }
+    
+    // Load crew assignments for each flight
+    for (int i = 0; i < flightsCount; i++) {
+        int flightCrewCount;
+        inFile >> flightCrewCount;
+        for (int j = 0; j < flightCrewCount; j++) {
+            CCrewMember* crew = CPlaneCrewFactory::GetCrewMemberFromFile(inFile);
+            if (crew && flights[i]) {
+                *flights[i] + crew;
+            }
+        }
+    }
+    
+    inFile.close();
 }
 
 

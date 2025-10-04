@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <stdexcept>
+#include "CFlightCompException.h"
 using namespace std;
 
 class CAddress {

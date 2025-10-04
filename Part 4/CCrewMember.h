@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CAddress.h"
+#include "CFlightCompException.h"
 #include <stdexcept>
 #include <string>
 

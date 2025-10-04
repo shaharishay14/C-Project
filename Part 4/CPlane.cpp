@@ -1,4 +1,7 @@
 #include "CPlane.h"
+#include "CCompStringException.h"
+#include "CCompLimitException.h"
+#include "CCompFileException.h"
 
 // Initialize static counter starting at 100
 int CPlane::nextSerialNumber = START_SERIAL;
@@ -9,8 +12,14 @@ CPlane::CPlane(int seatCountPar, const string& modelPar)
     , seatCount(0) // (0 allowed for UAVs)
     , model("Unknown")
 {
-    SetSeatCount(seatCountPar); // ignores invalid
-    SetModel(modelPar); // ignores invalid
+    SetSeatCount(seatCountPar); // Will throw exception if seatCount is negative
+    SetModel(modelPar); // Will throw exception if model is empty
+}
+
+// File constructor
+CPlane::CPlane(ifstream& inFile) : serialNumber(0), seatCount(0), model("") {
+    inFile >> serialNumber >> seatCount >> model;
+    // Note: We don't increment nextSerialNumber here as this is loading existing data
 }
 
 
@@ -35,7 +44,7 @@ int CPlane::GetSeatCount() const { return seatCount; }
 // Setters
 void CPlane::SetModel(const string& newModel) {
     if (newModel.empty()) {
-        throw invalid_argument("Model cannot be empty");
+        throw CCompStringException("Plane model cannot be empty");
     }
     model = newModel;
 }
@@ -87,4 +96,17 @@ CPlane CPlane::operator++(int) {
 
 CPlane* CPlane::Clone() const {
     return new CPlane(*this);
+}
+
+// Static methods for ID persistence
+void CPlane::SaveLastSerialNumber(ofstream& outFile) {
+    outFile << nextSerialNumber << endl;
+}
+
+void CPlane::LoadLastSerialNumber(ifstream& inFile) {
+    inFile >> nextSerialNumber;
+}
+
+void CPlane::SetNextSerialNumber(int value) {
+    nextSerialNumber = value;
 }

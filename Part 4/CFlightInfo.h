@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include "CFlightCompException.h"
 using namespace std;
 
 class CFlightInfo {
@@ -17,6 +18,9 @@ public:
     // Constructor: Initializes the flight info with all required details
     CFlightInfo(const string& destination, int flightNumber, int durationMinutes,
         int distanceKm);
+    
+    // File constructor
+    CFlightInfo(ifstream& inFile);
 
     // Copy constructor and destructor
     CFlightInfo(const CFlightInfo& other);

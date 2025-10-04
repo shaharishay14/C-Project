@@ -6,6 +6,7 @@
 #include "CFlightInfo.h"
 #include "CPlane.h"
 #include "CCrewMember.h"
+#include "CFlightCompException.h"
 
 using namespace std;
 
@@ -25,6 +26,9 @@ public:
 
     // Ctor with required flight info and optional plane
     CFlight(const CFlightInfo& flightInfo, const CPlane* plane = nullptr);
+    
+    // File constructor
+    CFlight(ifstream& inFile);
 
     // Copy constructor and destructor
     CFlight(const CFlight& other);

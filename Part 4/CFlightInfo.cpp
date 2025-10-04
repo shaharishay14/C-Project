@@ -1,4 +1,7 @@
 #include "CFlightInfo.h"
+#include "CCompStringException.h"
+#include "CCompLimitException.h"
+#include "CCompFileException.h"
 
 // Constructor: Initializes the flight info
 CFlightInfo::CFlightInfo(const string& destinationPar, int flightNumberPar, int durationMinutesPar, int distanceKmPar)
@@ -11,6 +14,11 @@ CFlightInfo::CFlightInfo(const string& destinationPar, int flightNumberPar, int 
     SetDest(destinationPar);                 // ignores invalid
     SetDurationMinutes(durationMinutesPar);  // ignores invalid
     SetDistanceKm(distanceKmPar);            // ignores invalid
+}
+
+// File constructor
+CFlightInfo::CFlightInfo(ifstream& inFile) : flightNumber(0), destination(""), durationMinutes(0), distanceKm(0) {
+    inFile >> flightNumber >> destination >> durationMinutes >> distanceKm;
 }
 
 // Copy constructor
@@ -52,30 +60,37 @@ int CFlightInfo::GetDistanceKm() const
 // Setters
 void CFlightInfo::SetDest(const string& dest)
 {
-    if (!dest.empty())
-        destination = dest;
-    // else: ignore invalid (leave as-is if empty)
+    if (dest.empty()) {
+        throw CCompStringException("Flight destination cannot be empty");
+    }
+    if (dest.length() > 12) {
+        throw CCompStringException("Flight destination too long (max 12 characters)");
+    }
+    destination = dest;
 }
 
 void CFlightInfo::SetDurationMinutes(int minutes)
 {
-    if (minutes >= 0)
-        durationMinutes = minutes;
-    // else: ignore invalid (leave as-is if it is negative)
+    if (minutes < 0) {
+        throw invalid_argument("Flight duration cannot be negative: " + to_string(minutes));
+    }
+    durationMinutes = minutes;
 }
 
 void CFlightInfo::SetDistanceKm(int km)
 {
-    if (km >= 0)
-        distanceKm = km;
-    // else: ignore invalid (leave as-is if it is negative)
+    if (km < 0) {
+        throw invalid_argument("Flight distance cannot be negative: " + to_string(km));
+    }
+    distanceKm = km;
 }
 
 void CFlightInfo::SetFlightNumber(int newFlightnNumber)
 {
-    if (newFlightnNumber > 0)
-        flightNumber = newFlightnNumber;
-    // else: ignore invalid (leave as-is if it is non positive)
+    if (newFlightnNumber <= 0) {
+        throw invalid_argument("Flight number must be positive: " + to_string(newFlightnNumber));
+    }
+    flightNumber = newFlightnNumber;
 }
 
 // Assignment operator

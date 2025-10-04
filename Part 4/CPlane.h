@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
+#include "CFlightCompException.h"
 using namespace std;
 
 class CPlane {
@@ -18,6 +20,9 @@ public:
     // Constructor: Initializes the plane with seat count and model
     // Serial number is automatically assigned
     CPlane(int seatCount, const string& model);
+    
+    // File constructor
+    CPlane(ifstream& inFile);
 
     // Copy constructor and destructor
     CPlane(const CPlane& other);
@@ -49,4 +54,9 @@ public:
     CPlane operator++(int);
 
     virtual CPlane* Clone() const;
+    
+    // Static methods for ID persistence
+    static void SaveLastSerialNumber(ofstream& outFile);
+    static void LoadLastSerialNumber(ifstream& inFile);
+    static void SetNextSerialNumber(int value);
 };
