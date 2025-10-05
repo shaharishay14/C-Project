@@ -1,7 +1,7 @@
 Delta
 3
 0 momo 100 1
-1 koko 400 0 0 empty empty 0
+1 koko 400 0 456 Broadway NYC 0
 1 Shahar 0 1 8 Hashfela Beit-Dagan 0
 3
 0 100 eee 100
