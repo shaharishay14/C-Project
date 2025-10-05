@@ -1,7 +1,7 @@
 #include "CCargo.h"
 #include "CCompStringException.h"
-#include "CCompLimitException.h"
-#include "CCompFileException.h"
+#include <stdexcept>
+
 
 // Constructor
 CCargo::CCargo(int seats, const string& model, float maxKg, float maxVolume)
@@ -11,6 +11,19 @@ CCargo::CCargo(int seats, const string& model, float maxKg, float maxVolume)
     SetMaxVolume(maxVolume);
     SetCurrentKg(0);
     SetCurrentVolume(0);
+}
+
+// Constructor with specific serial number
+CCargo::CCargo(int seats, const string& model, float maxKg, float maxVolume, int serialNumber)
+    : CPlane(seats, model, serialNumber)
+    , maxKg(maxKg)
+    , maxVolume(maxVolume)
+    , currentKg(0)
+    , currentVolume(0)
+{
+    if (maxKg <= 0 || maxVolume <= 0) {
+        throw invalid_argument("Max weight and volume must be positive");
+    }
 }
 
 // File constructor

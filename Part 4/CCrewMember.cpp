@@ -1,7 +1,6 @@
 #include "CCrewMember.h"
 #include "CCompStringException.h"
-#include "CCompLimitException.h"
-#include "CCompFileException.h"
+
 
 
 // Constructor: Initializes the crew member  with name and address and air time

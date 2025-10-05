@@ -1,7 +1,6 @@
 #include "CFlightInfo.h"
 #include "CCompStringException.h"
-#include "CCompLimitException.h"
-#include "CCompFileException.h"
+
 
 // Constructor: Initializes the flight info
 CFlightInfo::CFlightInfo(const string& destinationPar, int flightNumberPar, int durationMinutesPar, int distanceKmPar)
@@ -33,7 +32,7 @@ CFlightInfo::CFlightInfo(const CFlightInfo& other)
 // Destructor
 CFlightInfo::~CFlightInfo()
 {
-    // Nothing to release
+    // Nothing to releasehe fi
 }
 
 // Getters

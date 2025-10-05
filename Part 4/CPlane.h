@@ -19,7 +19,10 @@ public:
 
     // Constructor: Initializes the plane with seat count and model
     // Serial number is automatically assigned
-    CPlane(int seatCount, const string& model);
+    CPlane(int seatCount, const string &model);
+
+    // Constructor: Initializes the plane with seat count, model, and specific serial number
+    CPlane(int seatCount, const string& model, int serialNumber);
     
     // File constructor
     CPlane(ifstream& inFile);
@@ -59,4 +62,6 @@ public:
     static void SaveLastSerialNumber(ofstream& outFile);
     static void LoadLastSerialNumber(ifstream& inFile);
     static void SetNextSerialNumber(int value);
+    static int GetLastSerialNumber();
+
 };

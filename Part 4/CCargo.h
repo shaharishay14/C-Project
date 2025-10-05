@@ -14,7 +14,10 @@ public:
     CCargo() = delete; // Disables the default constructor
 
     // Constructor: Initializes the cargo with seats, model, max kg and max volume
-    CCargo(int seats, const string& model, float maxKg, float maxVolume);
+    CCargo(int seats, const string &model, float maxKg, float maxVolume);
+
+    // Constructor: Initializes the cargo with seats, model, max kg, max volume, and specific serial number
+    CCargo(int seats, const string& model, float maxKg, float maxVolume, int serialNumber);
     
     // File constructor
     CCargo(ifstream& inFile);

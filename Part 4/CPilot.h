@@ -2,6 +2,8 @@
 
 #include "CCrewMember.h"
 #include "CFlightCompException.h"
+#include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -19,6 +21,9 @@ public:
 
     // Constructor without address for unregistered pilots
     CPilot(const string& name, bool isCaptain, int airTime = 0);
+
+	// Constructor with name and address, defaults to not a captain
+	CPilot(const string& name, CAddress address, int airTime = 0);
     
     // File constructor
     CPilot(ifstream& inFile);

@@ -2,6 +2,8 @@
 
 #include "CCrewMember.h"
 #include "CFlightCompException.h"
+#include <string>
+#include <fstream>
 
 class CHost : public CCrewMember {
 public:

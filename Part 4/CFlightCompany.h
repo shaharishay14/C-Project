@@ -38,6 +38,7 @@ public:
     
     // Constructor: Initializes the flight company from file
     CFlightCompany(const string& filename, int dummy);
+	CFlightCompany(ifstream& inFile);
 
     // Copy constructor and destructor
     CFlightCompany(const CFlightCompany& other);
@@ -46,9 +47,13 @@ public:
     // Getters
     const string& GetName() const;
     CCrewMember* GetCrewMember(const int index) const; // Get crew member by index
+    CCrewMember* GetCrewMemberByName(const string& name) const; // Get crew member by name
     CFlight* GetFlightByNum(const int flightNumber) const; // Get flight by flight number
     CPlane* GetPlane(const int index) const; // Get plane by index
     int GetCargoCount() const; // Get cargo plane count
+    int GetCrewCount() const;  // Get crew count
+    int GetPlaneCount() const; // Get plane count
+    int GetFlightCount() const; // Get flight count
 
     // Setters
     void SetName(const string& newName);
@@ -67,8 +72,10 @@ public:
     const CPlane& operator[](int index) const;
     
     // File I/O methods
-    void SaveToFile(const string& filename) const;
+    void SaveToFile(const string &filename) const;
+    void SaveToFile(ofstream& outFile) const;
     void LoadFromFile(const string& filename);
+	void LoadFromFile(ifstream& inFile);
 
     // Stream operators
     friend ostream& operator<<(ostream& os, const CFlightCompany& flightCompany);

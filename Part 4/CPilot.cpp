@@ -14,13 +14,19 @@ CPilot::CPilot(const string& name, bool isCaptain, int airTime)
     // Will throw exception if parameters are invalid through parent constructor
 }
 
+// Constructor with name and address, defaults to not a captain
+CPilot::CPilot(const string& name, CAddress address, int airTime)
+    : CCrewMember(name, new CAddress(address), airTime), isCaptain(false) {
+    // Will throw exception if parameters are invalid through parent constructor
+}
+
 // File constructor
 CPilot::CPilot(ifstream& inFile) : CCrewMember("", nullptr, 0) {
     string name;
     int airTime;
     inFile >> name >> airTime;
     SetName(name);
-    SetAirTime(airTime);
+	this->operator+=(airTime);
     isCaptain = true; // Default to captain
 }
 

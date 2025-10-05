@@ -1,14 +1,14 @@
 #pragma once
 
 
-typedef enum PlaneType
+enum PlaneType
 {
 	eRegular,
 	eCargo,
 	nofPlaneType
 };
 
-typedef enum CrewType
+enum CrewType
 {
 	eHost,
 	ePilot,
@@ -27,19 +27,31 @@ class CPlane;
 class CCrewMember;
 class CFlightCompany;
 class CAddress;
-
+class CFlight;
 class CPlaneCrewFactory
 {
 public:
 
 	static PlaneType GetPlaneType(const CPlane* pPlane);
-	static CrewType GetCrewType(const CCrewMember* pCrew);
+	static CrewType GetCrewType(const CCrewMember *pCrew);
+
+    // Get company data from user
 	static void GetCompanyDataFromUser(CFlightCompany& comp);
 	static CPlane* GetPlaneFromUser();
-	static CCrewMember* GetCrewFromUser();
+	static CCrewMember *GetCrewFromUser();
+	static CFlight* GetFlightFromUser(CFlightCompany& company);
 
+    // Get company data from file
 	static CCrewMember* GetCrewMemberFromFile(ifstream& inFile);
 	static CPlane* GetPlaneFromFile(ifstream& inFile);
+	static CFlight *GetFlightFromFile(ifstream &inFile, CFlightCompany *company);
+
+    // Save company data to file
+    static void SaveCrewMemberToFile(ofstream& outFile, const CCrewMember* crew);
+    static void SavePlaneToFile(ofstream& outFile, const CPlane* plane);
+    static void SaveFlightToFile(ofstream& outFile, const CFlight* flight);
+
+	
 
 
 private:

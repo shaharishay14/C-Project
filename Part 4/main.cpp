@@ -1,188 +1,105 @@
 #define _CRT_SECURE_NO_DEPRECATE
 
 #include <iostream>
+#include <fstream>
 using namespace std;
 
-#include "CPlane.h"
-#include "CFlightInfo.h"
-#include "CCrewMember.h"
-#include "CFlight.h"
 #include "CFlightCompany.h"
-#include "CAddress.h"
-#include "CPilot.h"
-#include "CCargo.h"
-#include "CHost.h"
 #include "CFlightCompException.h"
-#include "PlaneCrewFactory.h"
+#include "CPlaneCrewFactory.h"
 
 //const int CM_COUNT = 5;
 //const int PLANE_COUNT = 4;
 //const int FLIGHT_COUNT = 4;
 
-void main()
+int main()
 {
 
-	CFlightCompany* pDelta=NULL;
-	try
-	{
+  	CFlightCompany *pDelta = nullptr;
 
-		pDelta = new CFlightCompany("Delta.txt",0);
-		cout << "This was in file " << endl;
-		pDelta->Print(cout);
+  	// Check if file is empty first
+    ifstream checkFile("Delta.txt");
+    bool isEmpty = false;
+    
+    if (checkFile.is_open()) {
+        checkFile.seekg(0, ios::end);
+        if (checkFile.tellg() == 0) {
+            isEmpty = true;
+            cout << "=== File is empty, will get user input ===" << endl;
+        }
+        checkFile.close();
+    } else {
+        isEmpty = true;
+        cout << "=== File doesn't exist, will get user input ===" << endl;
+    }
+    
+    if (isEmpty) {
+        // File is empty - get user input
+        cout << "=== Creating new flight company from user input ===" << endl;
+        pDelta = new CFlightCompany("Delta");
+        
+        // Get data from user
+        CPlaneCrewFactory::GetCompanyDataFromUser(*pDelta);
+        
+        cout << "\n=== New flight company created with user data: ===" << endl;
+        pDelta->Print(cout);
+    }
+    else {
+        // File is not empty - try to load it
+        try {
+            cout << "=== Attempting to load flight company from file ===" << endl;
+            ifstream inFile("Delta.txt");
+            pDelta = new CFlightCompany(inFile);
+            inFile.close();
+            cout << "=== Successfully loaded flight company from file! ===" << endl;
+            pDelta->Print(cout);
+        }
+        catch (const CFlightCompException& e) {
+            cout << "=== Failed to load from file: ";
+            e.Show();
+            cout << "\n=== Creating new flight company from user input instead ===" << endl;
+            
+            // If loading failed, create new company and get user input
+            pDelta = new CFlightCompany("Delta");
+            CPlaneCrewFactory::GetCompanyDataFromUser(*pDelta);
+            
+            cout << "\n=== New flight company created with user data: ===" << endl;
+            pDelta->Print(cout);
+        }
+    }
 
-	} catch (const CFlightCompException& e){
-		e.Show();
-		pDelta = new CFlightCompany("Delta");
-	}
+    cout << "=== Would you like to add data to the flight company? (y/n) ==="
+         << endl;
+    char choice;
+    cin >> choice;
+    if (choice == 'y') {
+        CPlaneCrewFactory::GetCompanyDataFromUser(*pDelta);
+        cout << "\n=== Data added to the flight company: ===" << endl;
+        pDelta->Print(cout);
+    }
+    else {
+        cout << "=== No data added to the flight company. ===" << endl;
+    }
 
-	//Checking some of the exception put try and catch for each section	
-	
-	// Test 1: CPlane constructor with negative seat count
-	try {
-		cout << "\n=== Testing CPlane constructor with negative seat count ===" << endl;
-		CPlane p1(-34,"AirBus");
-	} catch (const CFlightCompException& e) {
-		cout << "Caught exception: ";
-		e.Show();
-	}
-	
-	// Test 2: CCargo constructor with negative maxKg
-	try {
-		cout << "\n=== Testing CCargo constructor with negative maxKg ===" << endl;
-		CCargo c1(45,"Jumbo",-560,200);
-	} catch (const CFlightCompException& e) {
-		cout << "Caught exception: ";
-		e.Show();
-	}
-	
-	// Test 3: CCargo constructor with negative maxVolume
-	try {
-		cout << "\n=== Testing CCargo constructor with negative maxVolume ===" << endl;
-		CCargo c2(45,"Jumbo",560,-200);
-	} catch (const CFlightCompException& e) {
-		cout << "Caught exception: ";
-		e.Show();
-	}
-	
-	// Test 4: CFlightInfo constructor with negative flight number
-	try {
-		cout << "\n=== Testing CFlightInfo constructor with negative flight number ===" << endl;
-		CFlightInfo f1("London",-23,120,5000);
-	} catch (const CFlightCompException& e) {
-		cout << "Caught exception: ";
-		e.Show();
-	}
-	
-	// Test 5: CFlightInfo constructor with too long destination
-	try {
-		cout << "\n=== Testing CFlightInfo constructor with too long destination ===" << endl;
-		CFlightInfo f2("LondonVeryLong",23,120,5000);
-	} catch (const CFlightCompException& e) {
-		cout << "Caught exception: ";
-		e.Show();
-	}
-	
-	// Test 6: CFlightInfo constructor with negative duration
-	try {
-		cout << "\n=== Testing CFlightInfo constructor with negative duration ===" << endl;
-		CFlightInfo f3("London",23,-120,5000);
-	} catch (const CFlightCompException& e) {
-		cout << "Caught exception: ";
-		e.Show();
-	}
-	
-	// Test 7: CFlightInfo constructor with negative distance
-	try {
-		cout << "\n=== Testing CFlightInfo constructor with negative distance ===" << endl;
-		CFlightInfo f4("London",23,120,-5000);
-	} catch (const CFlightCompException& e) {
-		cout << "Caught exception: ";
-		e.Show();
-	}
-	
-	// Test 8: Array access with invalid index
-	try {
-		cout << "\n=== Testing GetCrewMember with invalid index ===" << endl;
-		CCrewMember* pC1 = pDelta->GetCrewMember(-1);
-	} catch (const CFlightCompException& e) {
-		cout << "Caught exception: ";
-		e.Show();
-	}
-	
-	// Test 9: Air crew handling with negative delta minutes
-	try {
-		cout << "\n=== Testing air crew handling with negative delta minutes ===" << endl;
-		CCrewMember* pC2 = pDelta->GetCrewMember(0);
-		(*pC2) +=-4;
-	} catch (const CFlightCompException& e) {
-		cout << "Caught exception: ";
-		e.Show();
-	}
-	
-	// Test 10: Array access operator with invalid index
-	try {
-		cout << "\n=== Testing [] operator with invalid index ===" << endl;
-		CPlane p0 = (*pDelta)[9];
-	} catch (const CFlightCompException& e) {
-		cout << "Caught exception: ";
-		e.Show();
-	}
-
-
-
-	//call a static function that get plane or customer from user.
-	
-	CPlaneCrewFactory::GetCompanyDataFromUser(*pDelta);
-
-	// Test 11: Normal operations (should work)
-	try {
-		cout << "\n=== Testing normal operations ===" << endl;
-		CFlightInfo Info("Paris",343,320,5000);
-		CFlight flight1(Info, &(*pDelta)[0]);
-		pDelta->AddFlight(flight1);
-
-		CFlight* pF = pDelta->GetFlightByNum(343);
-		CCrewMember* pCmTemp;
-		if ( pF != NULL) {
-			cout << "flight 343 was found " << endl;
-			for (int i = 0; i < pDelta->GetCrewCount(); i++){
-				pCmTemp = pDelta->GetCrewMember(i);
-				*pF + pCmTemp;
-			}
-		}
-	} catch (const CFlightCompException& e) {
-		cout << "Caught exception: ";
-		e.Show();
-	}
-
-	
-	try
-	{
-
-		pDelta->SaveToFile("Delta.txt");
-
-	} catch (const CFlightCompException& e){
-		e.Show();
-	}
-
-	// Save data before exiting
-	try {
-		cout << "\n=== Saving company data to file ===" << endl;
-		pDelta->SaveToFile("Delta.txt");
-		cout << "Data saved successfully!" << endl;
-	} catch (const CFlightCompException& e) {
-		cout << "Error saving data: ";
-		e.Show();
-	}
-
-	delete pDelta;
-
-
-
-
-
-	cout << "\n=== Exception Testing Complete ===" << endl;
-	cout << "All exception handling scenarios have been tested!" << endl;
-
-	system("pause");
+    
+     // Save the flight company regardless of how data was received
+    try {
+        cout << "\n=== Saving flight company data to file ===" << endl;
+        pDelta->SaveToFile("Delta.txt");
+        cout << "=== Data successfully saved to Delta.txt! ===" << endl;
+    }
+    catch (const CFlightCompException& e) {
+        cout << "=== Error saving data: ";
+        e.Show();
+    }
+    
+    // Clean up
+    cout << "\n=== Cleaning up ===" << endl;
+    delete pDelta;
+    pDelta = nullptr;
+    
+    cout << "=== Flight company deleted. Program completed successfully! ===" << endl;
+    
+    system("pause");
+    return 0;
 }

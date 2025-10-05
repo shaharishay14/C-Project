@@ -18,7 +18,7 @@ CHost::CHost(ifstream& inFile) : CCrewMember("", nullptr, 0) {
     int airTime;
     inFile >> name >> airTime;
     SetName(name);
-    SetAirTime(airTime);
+    this->operator+=(airTime);
     hostType = eRegular; // Default to regular
 }
 

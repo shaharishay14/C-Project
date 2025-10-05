@@ -5,7 +5,6 @@
 #include "CCargo.h"
 #include "CCompStringException.h"
 #include "CCompLimitException.h"
-#include "CCompFileException.h"
 #include <typeinfo>
 
 // Helper: find crew index; returns -1 if not found
@@ -44,10 +43,7 @@ CFlight::CFlight(const CFlightInfo& flightInfoPar, const CPlane* planePar)
 }
 
 // File constructor
-CFlight::CFlight(ifstream& inFile) : plane(nullptr), crewCount(0) {
-    // Load flight info from file
-    flightInfo = CFlightInfo(inFile);
-    
+CFlight::CFlight(ifstream& inFile) : flightInfo(inFile), plane(nullptr), crewCount(0) {
     // Initialize crew array
     for (int i = 0; i < MAX_CREW; ++i) {
         crew[i] = nullptr;
